@@ -10,15 +10,20 @@ package util;
  */
 public class AppConstants {
 
+    public static final String JDBC_URL = "jdbc:postgresql://db_container:5432/ltm_demo";
+    public static final String CLASS_FOR_NAME = "org.postgresql.Driver";
+    public static final String JDBC_USERNAME = "postgres";
+    public static final String JDBC_PASSWORD = "1234";
+
     public static final String WEBHOOK_LOG_ENDPOINT = "http://localhost:8080/api/webhook/log";
     public static final String WEBHOOK_SCOREBOARD_ENDPOINT = "http://localhost:8080/api/webhook/scoreboard";
     public static final int TIME_OUT_DURATION = 5000;
-    
+
     public static final int SERVER_PORT = 807;
     public static final int MAX_CONNECTION = Math.max(2, Runtime.getRuntime().availableProcessors() - 2);
     public static final int MAX_CONNECTION_PER_MINUTE = 10;
     public static final int WAITING_TIME = 10;
-    
+
     // Exercise response status code
     public static final int ACCEPTED = 100;
     public static final int WRONG_ANSWER = 101;
@@ -26,5 +31,5 @@ public class AppConstants {
     public static final int TIME_OUT = 103;
     public static final int REQUEST_WRONG_EXERCISE = 104;
     public static final int INVALID_USER = 105;
-    
+
 }

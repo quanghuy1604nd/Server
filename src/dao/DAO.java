@@ -11,18 +11,14 @@ package dao;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import static util.AppConstants.*;
 
 public class DAO {
 
-    private static final String jdbcUrl = "jdbc:postgresql://localhost:5432/ltm_demo";
-    private static final String classForName = "org.postgresql.Driver";
-    private static final String jdbcUsername = "postgres";
-    private static final String jdbcPassword = "1234";
-
     public Connection getConnection() {
         try {
-            Class.forName(classForName);
-            Connection connection = DriverManager.getConnection(jdbcUrl, jdbcUsername, jdbcPassword);
+            Class.forName(CLASS_FOR_NAME);
+            Connection connection = DriverManager.getConnection(JDBC_URL, JDBC_USERNAME, JDBC_PASSWORD);
             return connection;
         } catch (ClassNotFoundException | SQLException e) {
             e.printStackTrace();

@@ -72,7 +72,7 @@ public class GeneralExercise {
             Long userContestId = userContestDAO.findUserContestIdByUserIdAndContestId(studentCode, contestId);
             Long exerciseContestId = exerciseContestDAO.findUserContestIdByUserIdAndContestId(qCode, contestId);
             if(userId == null) {
-                webhookService.sendWebhookLogs(String.format("Mã sinh viên %s chưa đăng kí!", studentCode));
+                webhookService.sendWebhookLogs(String.format("Mã sinh viên %s chưa đăng kí! hoặc IP không trùng khớp", studentCode));
                 shutdown();
                 return;
             }
