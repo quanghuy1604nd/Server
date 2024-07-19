@@ -48,7 +48,7 @@ public class TCPClient implements Runnable{
             dos.writeUTF(requestCode);
             // get question from server
             String question = dis.readUTF();
-            int sum = calcSum(question) + 1;
+            int sum = calcSum(question);
             System.out.println("question: " + question);
 
             // send back to server
@@ -76,8 +76,8 @@ public class TCPClient implements Runnable{
         }
     }
     public static void main(String[] args) throws IOException, InterruptedException {
-        String studentCode = "b20dccn115";
-        int questionCode = 1;
+        String studentCode = "b22aaaa222";
+        int questionCode = 405;
         String serverAddress = "20.198.242.126";
         int serverPort = 807;
         TCPClient client = new TCPClient(studentCode, questionCode, serverAddress, serverPort);

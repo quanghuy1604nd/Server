@@ -15,8 +15,8 @@ public class AppConstants {
     public static final String JDBC_USERNAME = "postgres";
     public static final String JDBC_PASSWORD = "1234";
 
-    public static final String WEBHOOK_LOG_ENDPOINT = "http://localhost:8080/api/webhook/log";
-    public static final String WEBHOOK_SCOREBOARD_ENDPOINT = "http://localhost:8080/api/webhook/scoreboard";
+    public static final String WEBHOOK_LOG_ENDPOINT = "http://20.198.242.126:8080/api/webhook/log";
+    public static final String WEBHOOK_SCOREBOARD_ENDPOINT = "http://20.198.242.126:8080/api/webhook/scoreboard";
     public static final int TIME_OUT_DURATION = 5000;
 
     public static final int SERVER_PORT = 807;
