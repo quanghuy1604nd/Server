@@ -9,5 +9,5 @@ package contest;
  * @author QuangHuy
  */
 public interface IExercise {
-    <T> String readRequestCode(T payload);
+    int process();
 }

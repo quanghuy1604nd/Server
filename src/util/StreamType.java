@@ -2,12 +2,15 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package contest;
+package util;
 
 /**
  *
  * @author QuangHuy
  */
-public class CharExercise {
-    
+public enum StreamType {
+    INPUT_STREAM,
+    DATA_STREAM,
+    CHARACTER_STREAM,
+    OBJECT_STREAM
 }

@@ -7,26 +7,24 @@ package contest;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
-import java.net.InetSocketAddress;
-import java.net.Socket;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.net.SocketTimeoutException;
-import java.time.LocalDateTime;
 import java.util.Random;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import model.UserExercise;
 import static util.AppConstants.*;
 
 /**
  *
  * @author QuangHuy
  */
-public class Ex1 extends DataExercise {
+public class E1 implements IExercise {
 
-    private static final Long QUESTION_CODE = 1L;
+    private final InputStream is;
+    private final OutputStream os;
 
-    public Ex1(Socket socket) throws IOException {
-        super(socket);
+    public E1(InputStream is, OutputStream os) {
+        this.is = is;
+        this.os = os;
     }
 
     public int[] genRandomArr(int sz) {
@@ -57,30 +55,29 @@ public class Ex1 extends DataExercise {
     }
 
     @Override
-    public void process(String studentCode, String ip, String questionCode) {
+    public int process() {
         try {
             // gen 4 number
             int[] randArr = genRandomArr(4);
             // gen question from 4 number
             String question = genQuestion(randArr);
-            dos.writeUTF(question);
+            os.write(question.getBytes());
+
+            byte[] buffer = new byte[1024];
+            int bytesRead = is.read(buffer);
+            String clientResponse = new String(buffer, 0, bytesRead);
+            
+            int response = Integer.parseInt(clientResponse);
             // get client answer
-            int clientAns = dis.readInt();
             int serverAns = getAnswer(randArr);
-            boolean status = clientAns == serverAns;
-            // Log
-            String message = String.format("%s %d: %s: question: %s server answer: %d, client answer: %d, status: %s",
-                    this.socket.getInetAddress(), this.socket.getPort(), studentCode, question, clientAns, serverAns, clientAns == serverAns);
-            webhookService.sendWebhookLogs(message);
-            if (status) {
-                userExerciseContestDAO.updateUserExerciseContest(userExerciseContestId, status);
+            if(response == serverAns) {
+                return ACCEPTED;
+            } return WRONG_ANSWER;
+        } catch (Exception ex) {
+            if(ex instanceof SocketTimeoutException) {
+                return TIME_OUT;
             }
-            submissionDAO.insertSubmission(userExerciseContestId, LocalDateTime.now(), status, "");
-            webhookService.sendWebhookUpdateScoreBoard(userId);
-            shutdown();
-        } catch (IOException ex) {
-            Logger.getLogger(Ex1.class.getName()).log(Level.SEVERE, null, ex);
+            return INVALID_FORMAT_INPUT;
         }
     }
-
 }

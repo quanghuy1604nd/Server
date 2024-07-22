@@ -16,7 +16,7 @@ public class UserContestDAO extends DAO {
 
     private static final String SELECT_USERCONTESTID_BY_USERID_AND_CONTESTID = "SELECT user_contest.id FROM user_contest INNER JOIN \"user\"  ON \"user\".id = user_contest.user_id AND \"user\".username = ? AND user_contest.contest_id = ?";
 
-    public Long findUserContestIdByUserIdAndContestId(String username, Long contestId) {
+    public Long findUserContestIdByUsernameAndContestId(String username, Long contestId) {
 
         contestId = 1L;
 

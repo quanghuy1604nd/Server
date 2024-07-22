@@ -15,16 +15,16 @@ import java.time.LocalDateTime;
  */
 public class UserExerciseContestDAO extends DAO {
 
-    private static final String SELECT_USEREXERCISECONTESTID_BY_USERCONTESTID_AND_EXERCISECONTESTID = "SELECT user_exercise_contest.id FROM user_exercise_contest WHERE user_contest_id = ? AND exercise_contest_id = ?";
-    private static final String UPDATE_USEREXERCISECONTEST_BY_USERCONTESTID_AND_EXERCISECONTESTID_AND_AC = "UPDATE user_exercise_contest SET ac = ? WHERE user_exercise_consted_id = ?";
+    private static final String SELECT_USEREXERCISECONTESTID_BY_USERCONTESTID_AND_EXERCISECONTESTID_AND_ALIASID = "SELECT user_exercise_contest.id FROM user_exercise_contest WHERE user_contest_id = ? AND exercise_contest_id = ? AND alias_id = ?";
+    private static final String UPDATE_USEREXERCISECONTEST_BY_USERCONTESTID_AND_EXERCISECONTESTID_AND_AC = "UPDATE user_exercise_contest SET ac = ? WHERE id = ?";
 
-    public Long findUserExerciseContestByUserContestIdAndExerciseContestId(Long userContestId, Long exerciseContestId) {
-        try (Connection connection = getConnection(); PreparedStatement preparedStatement = connection.prepareStatement(SELECT_USEREXERCISECONTESTID_BY_USERCONTESTID_AND_EXERCISECONTESTID);) {
+    public Long findUserExerciseContestByUserContestIdAndExerciseContestId(Long userContestId, Long exerciseContestId, Long aliasId) {
+        try (Connection connection = getConnection(); PreparedStatement preparedStatement = connection.prepareStatement(SELECT_USEREXERCISECONTESTID_BY_USERCONTESTID_AND_EXERCISECONTESTID_AND_ALIASID);) {
             preparedStatement.setLong(1, userContestId);
             preparedStatement.setLong(2, exerciseContestId);
+            preparedStatement.setLong(3, aliasId);
             ResultSet resultSet = preparedStatement.executeQuery();
             if (resultSet.next()) {
-                
                 return resultSet.getLong("id");
             }
         } catch (Exception e) {

@@ -13,14 +13,12 @@ import java.sql.ResultSet;
  * @author QuangHuy
  */
 public class ExerciseContestDAO extends DAO{
-   private static final String SELECT_EXERCISECONTESTID_BY_EXERCISEID_AND_CONTESTID = "SELECT exercise_contest.id FROM exercise_contest INNER JOIN exercise  ON exercise.id = exercise_contest.exercise_id AND exercise.alias = ? AND exercise_contest.contest_id = ?";
+   private static final String SELECT_EXERCISECONTESTID_BY_EXERCISEID_AND_CONTESTID = "SELECT exercise_contest.id FROM exercise_contest WHERE exercise_contest.exercise_id = ? AND exercise_contest.contest_id = ?";
 
-    public Long findUserContestIdByUserIdAndContestId(String exerciseAlias, Long contestId) {
-
-        contestId = 1L;
+    public Long findExerciseContestIdByExerciseIdAndContestId(Long exerciseId, Long contestId) {
 
         try (Connection connection = getConnection(); PreparedStatement preparedStatement = connection.prepareStatement(SELECT_EXERCISECONTESTID_BY_EXERCISEID_AND_CONTESTID);) {
-            preparedStatement.setString(1, exerciseAlias);
+            preparedStatement.setLong(1, exerciseId);
             preparedStatement.setLong(2, contestId);
             ResultSet resultSet = preparedStatement.executeQuery();
             if (resultSet.next()) {
