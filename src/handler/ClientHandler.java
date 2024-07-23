@@ -27,6 +27,8 @@ import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.net.SocketTimeoutException;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Matcher;
@@ -104,10 +106,14 @@ public class ClientHandler implements Runnable {
     public boolean isDuringContestTime() {
         Contest contest = contestDAO.findContestById(contestId);
         LocalDateTime now = LocalDateTime.now();
+        ZonedDateTime systemZoneTime = now.atZone(ZoneId.systemDefault());
+        ZonedDateTime vietnamZoneTime = systemZoneTime.withZoneSameInstant(ZoneId.of("Asia/Ho_Chi_Minh"));
+
+        LocalDateTime nowInVietnam = vietnamZoneTime.toLocalDateTime();
         System.out.println("Now: " + now);
         System.out.println("start: " + contest.getStartTime());
         System.out.println("end: " + contest.getEndTime());
-        return !(now.isBefore(contest.getStartTime()) || now.isAfter(contest.getEndTime()));
+        return !(nowInVietnam.isBefore(contest.getStartTime()) || nowInVietnam.isAfter(contest.getEndTime()));
     }
 
     public boolean isValidateRequestCode(String requestCode) {
