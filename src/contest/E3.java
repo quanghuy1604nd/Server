@@ -31,7 +31,8 @@ public class E3 implements IExercise {
         Random random = new Random();
         StringBuilder question = new StringBuilder();
         StringBuilder answer = new StringBuilder();
-        for (int cnt = 0; cnt < random.nextInt(5, 10); cnt++) {
+        int len = 10 + random.nextInt(10);
+        for (int cnt = 0; cnt < len; cnt++) {
             StringBuilder sb = new StringBuilder();
             for (int i = 0; i < random.nextInt(26); i++) {
                 char x = (char) (i + 'a');
@@ -49,7 +50,7 @@ public class E3 implements IExercise {
             question.append(sb);
             question.append(", ");
         }
-
+        System.out.println(question);
         try {
             writer.write(question.substring(0, question.length() - 2));
             writer.flush();

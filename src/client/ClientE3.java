@@ -20,7 +20,7 @@ public class ClientE3 {
     BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
     BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 
-    String value = "b20dccn112;302";
+    String value = "b20dccn111;300";
     writer.write(value);
     writer.write("\n");
     writer.flush();
