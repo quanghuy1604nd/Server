@@ -31,10 +31,10 @@ import java.net.Socket;
 public class ClientE6 {
 
     public static void main(String[] args) throws IOException {
-        Socket socket = new Socket("localhost", 1605);
+        Socket socket = new Socket("20.198.242.126", 1604);
         InputStream is = socket.getInputStream();
         OutputStream os = socket.getOutputStream();
-        os.write("b20dccn112;102".getBytes());
+        os.write("b20dccn111;600".getBytes());
         byte[] buffer = new byte[1024];
         int bytesRead = is.read(buffer);
         String question = new String(buffer, 0, bytesRead);

@@ -204,13 +204,14 @@ public class ClientHandler implements Runnable {
         if (isValid(requestCode)) {
             try {
                 Class clazz = Class.forName("contest.E" + this.exerciseId);
+                System.out.println(this.exerciseId);
                 Constructor<?> constructor = clazz.getConstructor(inputClass, outputClass);
                 Object instance = constructor.newInstance(input, output);
                 Method process = clazz.getMethod("process");
                 int result = (int) process.invoke(instance);
                 this.updateExerciseContestStatus(result);
-            } catch (NoSuchMethodException | ClassNotFoundException | IllegalAccessException | InvocationTargetException | InstantiationException ex) {
-                // TODO handle
+            } catch (ClassNotFoundException | NoSuchMethodException | SecurityException | InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException ex) {
+                Logger.getLogger(ClientHandler.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
         shutdown();
