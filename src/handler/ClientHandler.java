@@ -104,6 +104,8 @@ public class ClientHandler implements Runnable {
     public boolean isDuringContestTime() {
         Contest contest = contestDAO.findContestById(contestId);
         LocalDateTime now = LocalDateTime.now();
+        System.out.println("start: " + contest.getStartTime());
+        System.out.println("end: " + contest.getEndTime());
         return !(now.isBefore(contest.getStartTime()) || now.isAfter(contest.getEndTime()));
     }
 
@@ -186,6 +188,7 @@ public class ClientHandler implements Runnable {
                 }
             }
         }
+        System.out.println("Contest is over!");
         shutdown();
         return false;
     }

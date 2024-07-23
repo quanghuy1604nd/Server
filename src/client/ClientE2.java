@@ -80,9 +80,9 @@ public class ClientE2 implements Runnable{
         }
     }
     public static void main(String[] args) throws IOException, InterruptedException {
-        String studentCode = "b20dccn112";
+        String studentCode = "b20dccn111";
         int questionCode = 200;
-        String serverAddress = "localhost";
+        String serverAddress = "20.198.242.126";
         int serverPort = 1604;
         ClientE2 client = new ClientE2(studentCode, questionCode, serverAddress, serverPort);
         client.run();
