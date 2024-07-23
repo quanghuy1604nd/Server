@@ -31,7 +31,7 @@ public class E7 implements IExercise {
     @Override
     public int process() {
         Random rand = new Random();
-        int len = rand.nextInt(20, 40);
+        int len = 20 + rand.nextInt(40);
         StringBuilder sb = new StringBuilder();
         StringBuilder as = new StringBuilder();
         for (int i = 0; i < len; i++) {

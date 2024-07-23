@@ -30,7 +30,7 @@ public class E5 implements IExercise {
 
     public String generate() {
         Random rand = new Random();
-        int len = rand.nextInt(5, 20);
+        int len = 10 + rand.nextInt(20);
         StringBuilder sb = new StringBuilder();
         for (int i = 0; i < len; i++) {
             sb.append(src.charAt(rand.nextInt(src.length())));
