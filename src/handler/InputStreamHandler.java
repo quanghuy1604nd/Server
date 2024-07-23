@@ -6,9 +6,8 @@ package handler;
 
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.lang.reflect.Constructor;
-import java.lang.reflect.Method;
 import java.net.Socket;
+import static util.AppConstants.INVALID_FORMAT_INPUT;
 
 /**
  *
@@ -28,17 +27,9 @@ public class InputStreamHandler extends ClientHandler{
              byte[] buffer = new byte[1024];
             int bytesRead = is.read(buffer);
             String requestCode = new String(buffer, 0, bytesRead);
-            System.out.println(requestCode);
-            if (isValid(requestCode)) {
-                Class clazz = Class.forName("contest.E" + this.exerciseId);
-                Constructor<?> constructor = clazz.getConstructor(InputStream.class, OutputStream.class);
-                Object instance = constructor.newInstance(is, os);
-                Method process = clazz.getMethod("process");
-                int result = (int) process.invoke(instance);
-                this.updateExerciseContestStatus(result);
-            }
+            this.judge(InputStream.class, OutputStream.class, is, os, requestCode);
         } catch (Exception ex) {
-            this.webhookService.sendWebhookLogs("Invalid data");
+           webhookService.sendWebhookLogs(ip, username, alias, INVALID_FORMAT_INPUT, "Gửi sai định dạng");
         }
     }
 }

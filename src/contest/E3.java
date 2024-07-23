@@ -42,25 +42,25 @@ public class E3 implements IExercise {
             }
             int randId = random.nextInt(extenstion.length);
             sb.append(extenstion[randId]);
-            if(randId == 2) {
+            if (randId == 2) {
                 answer.append(sb);
                 answer.append(", ");
             }
             question.append(sb);
             question.append(", ");
         }
-                    System.out.println(answer);
 
         try {
             writer.write(question.substring(0, question.length() - 2));
             writer.flush();
             String response = reader.readLine();
             System.out.println(response);
-            if(response.equals(answer.substring(0, answer.length() - 2))) {
+            if (response.equals(answer.substring(0, answer.length() - 2))) {
                 return ACCEPTED;
-            } return WRONG_ANSWER;
+            }
+            return WRONG_ANSWER;
         } catch (Exception ex) {
-            if(ex instanceof SocketTimeoutException) {
+            if (ex instanceof SocketTimeoutException) {
                 return TIME_OUT;
             }
             return INVALID_FORMAT_INPUT;

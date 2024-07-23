@@ -17,7 +17,7 @@ import util.AppConstants;
 public class WebhookServiceImpl implements IWebhookService {
 
     @Override
-    public void sendWebhookLogs(String message) {
+    public void sendWebhookLogs(String ip, String username, String alias, int code, String message) {
         HttpURLConnection conn = null;
         try {
             URL url = new URL(AppConstants.WEBHOOK_LOG_ENDPOINT);
@@ -25,6 +25,7 @@ public class WebhookServiceImpl implements IWebhookService {
             conn.setRequestMethod("POST");
             conn.setRequestProperty("Content-Type", "application/json");
             conn.setDoOutput(true);
+            message = ip + " | " + username + " >>> " + alias + ": Trạng thái: " + code + ", " + message;
             try (OutputStream os = conn.getOutputStream()) {
                 byte[] input = message.getBytes("utf-8");
                 os.write(input, 0, input.length);
@@ -37,7 +38,7 @@ public class WebhookServiceImpl implements IWebhookService {
                 System.out.println("Failed to send webhook. Response code: " + responseCode);
             }
         } catch (IOException e) {
-            // TODO: handle
+            System.out.println("Cannot connect to Spring Boot server");
         } finally {
             if (conn != null) {
                 conn.disconnect();

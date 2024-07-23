@@ -9,7 +9,7 @@ package service;
  * @author QuangHuy
  */
 public interface IWebhookService {
-    void sendWebhookLogs(String message);
+    void sendWebhookLogs(String ip, String username, String alias, int code, String message);
 
     public void sendWebhookUpdateScoreBoard(Long userId);
 }

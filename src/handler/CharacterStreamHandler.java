@@ -13,6 +13,9 @@ import java.io.OutputStreamWriter;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
 import java.net.Socket;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import static util.AppConstants.INVALID_FORMAT_INPUT;
 
 /**
  *
@@ -25,20 +28,11 @@ public class CharacterStreamHandler extends ClientHandler {
     }
 
     public void process() {
-        try (BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream())); 
-                BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));) {
+        try (BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream())); BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));) {
             String requestCode = reader.readLine();
-            System.out.println(requestCode);
-            if (isValid(requestCode)) {
-                Class clazz = Class.forName("contest.E" + this.exerciseId);
-                Constructor<?> constructor = clazz.getConstructor(BufferedWriter.class, BufferedReader.class);
-                Object instance = constructor.newInstance(writer, reader);
-                Method process = clazz.getMethod("process");
-                int result = (int) process.invoke(instance);
-                this.updateExerciseContestStatus(result);
-            }
+            this.judge(BufferedWriter.class, BufferedReader.class, writer, reader, requestCode);
         } catch (Exception ex) {
-            this.webhookService.sendWebhookLogs("Invalid data");
+            webhookService.sendWebhookLogs(ip, username, alias, INVALID_FORMAT_INPUT, "Gửi sai định dạng");
         }
     }
 }

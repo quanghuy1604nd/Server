@@ -44,5 +44,7 @@ public class AppConstants {
     public static final int TIME_OUT = 103;
     public static final int REQUEST_WRONG_EXERCISE = 104;
     public static final int INVALID_USER = 105;
+    public static final int FORBIDDEN = 106;
+
 
 }

@@ -2,6 +2,26 @@
 <project-private xmlns="http://www.netbeans.org/ns/project-private/1">
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
-        <group/>
+        <group>
+            <file>file:/C:/Users/QuangHuy/OneDrive%20-%20ptit.edu.vn/Desktop/GraduationThesis/Preparation/Server/src/util/StreamType.java</file>
+            <file>file:/C:/Users/QuangHuy/OneDrive%20-%20ptit.edu.vn/Desktop/GraduationThesis/Preparation/Server/src/dao/ContestDAO.java</file>
+            <file>file:/C:/Users/QuangHuy/OneDrive%20-%20ptit.edu.vn/Desktop/GraduationThesis/Preparation/Server/src/handler/DataStreamHandler.java</file>
+            <file>file:/C:/Users/QuangHuy/OneDrive%20-%20ptit.edu.vn/Desktop/GraduationThesis/Preparation/Server/src/handler/CharacterStreamHandler.java</file>
+            <file>file:/C:/Users/QuangHuy/OneDrive%20-%20ptit.edu.vn/Desktop/GraduationThesis/Preparation/Server/src/contest/E1.java</file>
+            <file>file:/C:/Users/QuangHuy/OneDrive%20-%20ptit.edu.vn/Desktop/GraduationThesis/Preparation/Server/src/dao/SubmissionDAO.java</file>
+            <file>file:/C:/Users/QuangHuy/OneDrive%20-%20ptit.edu.vn/Desktop/GraduationThesis/Preparation/Server/src/server/TcpServer.java</file>
+            <file>file:/C:/Users/QuangHuy/OneDrive%20-%20ptit.edu.vn/Desktop/GraduationThesis/Preparation/Server/src/client/TCPClient.java</file>
+            <file>file:/C:/Users/QuangHuy/OneDrive%20-%20ptit.edu.vn/Desktop/GraduationThesis/Preparation/Server/src/dao/AliasDAO.java</file>
+            <file>file:/C:/Users/QuangHuy/OneDrive%20-%20ptit.edu.vn/Desktop/GraduationThesis/Preparation/Server/src/contest/E3.java</file>
+            <file>file:/C:/Users/QuangHuy/OneDrive%20-%20ptit.edu.vn/Desktop/GraduationThesis/Preparation/Server/src/client/ClientE3.java</file>
+            <file>file:/C:/Users/QuangHuy/OneDrive%20-%20ptit.edu.vn/Desktop/GraduationThesis/Preparation/Server/src/util/AppConstants.java</file>
+            <file>file:/C:/Users/QuangHuy/OneDrive%20-%20ptit.edu.vn/Desktop/GraduationThesis/Preparation/Server/src/contest/E2.java</file>
+            <file>file:/C:/Users/QuangHuy/OneDrive%20-%20ptit.edu.vn/Desktop/GraduationThesis/Preparation/Server/src/main/Main.java</file>
+            <file>file:/C:/Users/QuangHuy/OneDrive%20-%20ptit.edu.vn/Desktop/GraduationThesis/Preparation/Server/src/handler/InputStreamHandler.java</file>
+            <file>file:/C:/Users/QuangHuy/OneDrive%20-%20ptit.edu.vn/Desktop/GraduationThesis/Preparation/Server/src/client/ClientE2.java</file>
+            <file>file:/C:/Users/QuangHuy/OneDrive%20-%20ptit.edu.vn/Desktop/GraduationThesis/Preparation/Server/src/handler/ClientHandler.java</file>
+            <file>file:/C:/Users/QuangHuy/OneDrive%20-%20ptit.edu.vn/Desktop/GraduationThesis/Preparation/Server/src/dao/DAO.java</file>
+            <file>file:/C:/Users/QuangHuy/OneDrive%20-%20ptit.edu.vn/Desktop/GraduationThesis/Preparation/Server/src/contest/IExercise.java</file>
+        </group>
     </open-files>
 </project-private>

@@ -4,12 +4,10 @@
  */
 package contest;
 
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
-import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.net.SocketTimeoutException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.util.Random;
 import static util.AppConstants.*;
 
 /**
@@ -18,32 +16,67 @@ import static util.AppConstants.*;
  */
 public class E2 implements IExercise {
 
-    private final DataInputStream dis;
-    private final DataOutputStream dos;
+    private final InputStream is;
+    private final OutputStream os;
 
-    public E2(DataInputStream dis, DataOutputStream dos) {
-        this.dis = dis;
-        this.dos = dos;
+    public E2(InputStream is, OutputStream os) {
+        this.is = is;
+        this.os = os;
+    }
+
+    public int[] genRandomArr(int sz) {
+        int[] a = new int[sz];
+        Random rand = new Random();
+
+        for (int i = 0; i < sz; i++) {
+            a[i] = rand.nextInt(30);
+        }
+        return a;
+    }
+
+    public String genQuestion(int[] arr) {
+        String question = "";
+        for (int i = 0; i < arr.length - 1; i++) {
+            question += arr[i] + "|";
+        }
+        question += arr[3];
+        return question;
+    }
+
+    public int getAnswer(int[] arr) {
+        int serverAns = 0;
+        for (int i = 0; i < arr.length; i++) {
+            serverAns += arr[i];
+        }
+        return serverAns;
     }
 
     @Override
     public int process() {
         try {
-            int randNum1 = (int) (Math.random() * 20);
-            int randNum2 = (int) (Math.random() * 20);
-            int answer = randNum1 + randNum2;
-            dos.writeInt(randNum1);
-            dos.writeInt(randNum2);
-            int clientResponse = dis.readInt();
-            if(answer == clientResponse) {
+            // gen 4 number
+            int[] randArr = genRandomArr(4);
+            // gen question from 4 number
+            String question = genQuestion(randArr);
+            os.write(question.getBytes());
+
+            byte[] buffer = new byte[1024];
+            int bytesRead = is.read(buffer);
+            String clientResponse = new String(buffer, 0, bytesRead);
+            
+            int response = Integer.parseInt(clientResponse);
+            // get client answer
+            int serverAns = getAnswer(randArr);
+            if(response == serverAns) {
                 return ACCEPTED;
             } return WRONG_ANSWER;
         } catch (Exception ex) {
             if(ex instanceof SocketTimeoutException) {
                 return TIME_OUT;
+            } else if(ex instanceof NumberFormatException) {
+                return WRONG_ANSWER;
             }
             return INVALID_FORMAT_INPUT;
         }
     }
-
 }
