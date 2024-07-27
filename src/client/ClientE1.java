@@ -16,10 +16,10 @@ import java.net.Socket;
 public class ClientE1 {
 
     public static void main(String[] args) throws IOException {
-        Socket socket = new Socket("localhost", 1605);
+        Socket socket = new Socket("20.198.242.126", 1605);
         DataInputStream dis = new DataInputStream(socket.getInputStream());
         DataOutputStream dos = new DataOutputStream(socket.getOutputStream());
-        dos.writeUTF("b20dccn112;102");
+        dos.writeUTF("b20dccn111;100");
         int a = dis.readInt();
         int b = dis.readInt();
         dos.writeInt(a + b);
