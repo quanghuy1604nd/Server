@@ -17,6 +17,7 @@ public class TcpServer {
     private final ServerSocket dataStreamServer;
     private final ServerSocket charStreamServer;
     private final ServerSocket objStreamServer;
+    private final Filter filter;
 
     private final ExecutorService pool;
 
@@ -25,8 +26,10 @@ public class TcpServer {
         this.dataStreamServer = new ServerSocket(DATA_STREAM_PORT);
         this.charStreamServer = new ServerSocket(CHARACTER_STREAM_PORT);
         this.objStreamServer = new ServerSocket(OBJECT_STREAM_PORT);
+        this.filter = new Filter();
         this.pool = Executors.newFixedThreadPool(MAX_CONNECTION);
     }
+    
 
     public void run() {
         try {
@@ -34,7 +37,7 @@ public class TcpServer {
             System.out.println("DataStream Server is ready at port " + this.dataStreamServer.getLocalPort() + "...");
             System.out.println("CharacterStream Server is ready at port " + this.charStreamServer.getLocalPort() + "...");
             System.out.println("ObjectStream Server is ready at port " + this.objStreamServer.getLocalPort() + "...");
-
+            filter.scheduleFilter();
             // Start a new thread for each server socket
             new Thread(() -> listenToPort(this.inputStreamServer)).start();
             new Thread(() -> listenToPort(this.dataStreamServer)).start();
@@ -50,10 +53,9 @@ public class TcpServer {
         while (true) {
             try {
                 Socket conn = serverSocket.accept();
-                ClientHandler handler = new ClientHandler(conn);
-                pool.execute(handler);
+                filter.doFilter(conn, pool);
             } catch (IOException ex) {
-                ex.printStackTrace();
+                System.out.println("Handle failed");
             }
         }
     }
@@ -72,7 +74,7 @@ public class TcpServer {
             if (!this.objStreamServer.isClosed()) this.objStreamServer.close();
             this.pool.shutdown();
         } catch (IOException ex) {
-            ex.printStackTrace();
+            // Handle
         }
     }
 }

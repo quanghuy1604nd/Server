@@ -13,7 +13,7 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import static util.AppConstants.*;
 
-public class DAO {
+public abstract class AbstractDAO {
 
     public Connection getConnection() {
         try {

@@ -5,8 +5,6 @@
 package client;
 import java.io.*;
 import java.net.Socket;
-import java.util.Arrays;
-import java.util.List;
 /**
  *
  * @author QuangHuy
@@ -20,15 +18,21 @@ public class ClientE3 {
     BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
     BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 
-    String value = "b20dccn111;300";
+    String value = "b20dccn100;86ZIrDRn";
     writer.write(value);
     writer.write("\n");
     writer.flush();
     String receive = reader.readLine();
-    List<String> filtered = Arrays.stream(receive.split(", ")).filter(x -> x.endsWith(".edu")).toList();
-    filtered.forEach(System.out::println);
-    String result = String.join(", ", filtered);
-    System.out.println(result);
+    String[] arr = receive.split(", ");
+    StringBuilder sb = new StringBuilder();
+    for(String x : arr) {
+        if(x.endsWith(".edu")) {
+            sb.append(x);
+            sb.append(", ");
+        }
+    }
+        System.out.println(sb);
+    String result = sb.length() == 0 ? "" : sb.substring(0, sb.length() - 2);
     writer.write(result);
     writer.write("\n");
     writer.flush();

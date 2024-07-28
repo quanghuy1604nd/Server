@@ -12,10 +12,10 @@ import java.sql.ResultSet;
  *
  * @author QuangHuy
  */
-public class ExerciseContestDAO extends DAO{
+public class ContestExerciseDAO extends AbstractDAO{
    private static final String SELECT_EXERCISECONTESTID_BY_EXERCISEID_AND_CONTESTID = "SELECT exercise_contest.id FROM exercise_contest WHERE exercise_contest.exercise_id = ? AND exercise_contest.contest_id = ?";
 
-    public Long findExerciseContestIdByExerciseIdAndContestId(Long exerciseId, Long contestId) {
+    public Long findContestExerciseByExerciseIdAndContestId(Long exerciseId, Long contestId) {
 
         try (Connection connection = getConnection(); PreparedStatement preparedStatement = connection.prepareStatement(SELECT_EXERCISECONTESTID_BY_EXERCISEID_AND_CONTESTID);) {
             preparedStatement.setLong(1, exerciseId);

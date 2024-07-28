@@ -14,7 +14,7 @@ import model.UserExercise;
  *
  * @author QuangHuy
  */
-public class UserExerciseDAO extends DAO {
+public class UserExerciseDAO extends AbstractDAO {
 
     private static final String SELECT_USEREXERCISE_BY_USERID_AND_EXERCISEID = "SELECT * FROM user_exercise WHERE user_id = ? AND exercise_id = ?";
     private static final String INSERT_USEREXERCISE_BY_USERID_AND_EXERCISEID = "INSERT INTO user_exercise (user_id, exercise_id, created_at, ac) VALUES(?, ?, ?, ?)";

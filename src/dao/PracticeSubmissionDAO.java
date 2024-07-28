@@ -13,14 +13,13 @@ import java.time.LocalDateTime;
  *
  * @author QuangHuy
  */
-public class SubmissionDAO extends DAO{
+public class PracticeSubmissionDAO extends AbstractDAO {
+        private static final String INSERT_SUBMISSON_BY_PRACTICEUSEREXERCISEID = "INSERT INTO practice_submission (practice_user_exercise_id, created_at, ac, src_path) VALUES(?, ?, ?, ?)";
 
-    private static final String INSERT_SUBMISSON_BY_USEREXERCISECONTESTID = "INSERT INTO submission (user_exercise_contest_id, created_at, ac, src_path) VALUES(?, ?, ?, ?)";
-
-    public void insertSubmission(Long userExerciseContestId, LocalDateTime createdAt, boolean ac, String srcPath) {
+    public void insertPracticeSubmission(Long practiceUserExerciseId, LocalDateTime createdAt, boolean ac, String srcPath) {
         try (Connection connection = getConnection(); 
-                PreparedStatement preparedStatement = connection.prepareStatement(INSERT_SUBMISSON_BY_USEREXERCISECONTESTID);) {
-            preparedStatement.setLong(1, userExerciseContestId);
+                PreparedStatement preparedStatement = connection.prepareStatement(INSERT_SUBMISSON_BY_PRACTICEUSEREXERCISEID);) {
+            preparedStatement.setLong(1, practiceUserExerciseId);
             preparedStatement.setObject(2, createdAt);
             preparedStatement.setBoolean(3, ac);
             preparedStatement.setString(4, srcPath);
@@ -30,5 +29,4 @@ public class SubmissionDAO extends DAO{
             e.printStackTrace();
         }
     }
-
 }

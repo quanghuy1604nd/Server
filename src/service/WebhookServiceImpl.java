@@ -8,7 +8,12 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import util.AppConstants;
+import payload.ContestLogPayload;
+import payload.ContestScoreBoardPayload;
+import payload.Payload;
+import payload.PracticeLogPayload;
+import payload.PracticeScoreBoardPayload;
+import static util.AppConstants.*;
 
 /**
  *
@@ -16,18 +21,22 @@ import util.AppConstants;
  */
 public class WebhookServiceImpl implements IWebhookService {
 
+    
+
     @Override
-    public void sendWebhookLogs(String ip, String username, String alias, int code, String message) {
+    public void sendContestLogs(Payload payload, Long contestId, Long contestUserId, int code, String message) {
+        // need send: contestId, contestUserId, message => contestId|contestUserId|message
         HttpURLConnection conn = null;
         try {
-            URL url = new URL(AppConstants.WEBHOOK_LOG_ENDPOINT);
+            URL url = new URL(WEBHOOK_CONTEST_LOG_ENDPOINT);
             conn = (HttpURLConnection) url.openConnection();
             conn.setRequestMethod("POST");
             conn.setRequestProperty("Content-Type", "application/json");
+            conn.setRequestProperty("secret-token", WEBHOOK_TOKEN);
             conn.setDoOutput(true);
-            message = ip + " | " + username + " >>> " + alias + ": Trạng thái: " + code + ", " + message;
+            ContestLogPayload contestLogPayload = new ContestLogPayload(payload, contestId, contestUserId, code, message);
             try (OutputStream os = conn.getOutputStream()) {
-                byte[] input = message.getBytes("utf-8");
+                byte[] input = contestLogPayload.toJson().getBytes("utf-8");
                 os.write(input, 0, input.length);
             }
 
@@ -47,17 +56,18 @@ public class WebhookServiceImpl implements IWebhookService {
     }
 
     @Override
-    public void sendWebhookUpdateScoreBoard(Long userId) {
+    public void sendRequestToUpdateContestScoreBoard(Payload payload, Long contestId, Long contestUserId) {
         HttpURLConnection conn = null;
         try {
-            URL url = new URL(AppConstants.WEBHOOK_SCOREBOARD_ENDPOINT);
+            URL url = new URL(WEBHOOK_CONTEST_SCOREBOARD_ENDPOINT);
             conn = (HttpURLConnection) url.openConnection();
             conn.setRequestMethod("POST");
             conn.setRequestProperty("Content-Type", "application/json");
+            conn.setRequestProperty("Secret-token", "graduationthesis");
             conn.setDoOutput(true);
-
+            ContestScoreBoardPayload contestScoreBoardPayload = new ContestScoreBoardPayload(payload, contestId, contestUserId);
             try (OutputStream os = conn.getOutputStream()) {
-                byte[] input = (userId+"").getBytes("UTF-8");
+                byte[] input = contestScoreBoardPayload.toJson().getBytes("UTF-8");
                 os.write(input, 0, input.length);
             }
 
@@ -69,6 +79,68 @@ public class WebhookServiceImpl implements IWebhookService {
             }
         } catch (IOException e) {
             // TODO: handle
+        } finally {
+            if (conn != null) {
+                conn.disconnect();
+            }
+        }
+    }
+
+    @Override
+    public void sendPracticeLogs(Payload payload, int code, String message) {
+        HttpURLConnection conn = null;
+        try {
+            URL url = new URL(WEBHOOK_PRACTICE_LOG_ENDPOINT);
+            conn = (HttpURLConnection) url.openConnection();
+            conn.setRequestMethod("POST");
+            conn.setRequestProperty("Content-Type", "application/json");
+            conn.setRequestProperty("secret-token", WEBHOOK_TOKEN);
+            conn.setDoOutput(true);
+            PracticeLogPayload practiceLogPayload = new PracticeLogPayload(payload, code, message);
+            try (OutputStream os = conn.getOutputStream()) {
+                byte[] input = practiceLogPayload.toJson().getBytes("utf-8");
+                os.write(input, 0, input.length);
+            }
+
+            int responseCode = conn.getResponseCode();
+            if (responseCode == HttpURLConnection.HTTP_OK) {
+//                System.out.println("Webhook sent successfully.");
+            } else {
+                System.out.println("PRACTICE LOG: Failed to send webhook. Response code: " + responseCode);
+            }
+        } catch (IOException e) {
+            System.out.println("PRACTICE LOG: Cannot connect to Spring Boot server");
+        } finally {
+            if (conn != null) {
+                conn.disconnect();
+            }
+        }
+    }
+
+    @Override
+    public void sendRequestToUpdatePracticeScoreBoard(Payload payload, Long userId) {
+        HttpURLConnection conn = null;
+        try {
+            URL url = new URL(WEBHOOK_PRACTICE_SCOREBOARD_ENDPOINT);
+            conn = (HttpURLConnection) url.openConnection();
+            conn.setRequestMethod("POST");
+            conn.setRequestProperty("Content-Type", "application/json");
+            conn.setRequestProperty("secret-token", WEBHOOK_TOKEN);
+            conn.setDoOutput(true);
+            PracticeScoreBoardPayload practiceScoreBoardPayload = new PracticeScoreBoardPayload(payload, userId);
+            try (OutputStream os = conn.getOutputStream()) {
+                byte[] input = practiceScoreBoardPayload.toJson().getBytes("utf-8");
+                os.write(input, 0, input.length);
+            }
+
+            int responseCode = conn.getResponseCode();
+            if (responseCode == HttpURLConnection.HTTP_OK) {
+//                System.out.println("Webhook sent successfully.");
+            } else {
+                System.out.println("PRACTICE SCOREBOARD: Failed to send webhook. Response code: " + responseCode);
+            }
+        } catch (IOException e) {
+            System.out.println("PRACTICE SCOREBOARD: Cannot connect to Spring Boot server");
         } finally {
             if (conn != null) {
                 conn.disconnect();

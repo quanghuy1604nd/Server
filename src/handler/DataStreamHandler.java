@@ -28,8 +28,7 @@ public class DataStreamHandler extends ClientHandler {
             String requestCode = dis.readUTF();
             this.judge(DataInputStream.class, DataOutputStream.class, dis, dos, requestCode);
         } catch (Exception ex) {
-            System.out.println(this.ip);
-            webhookService.sendWebhookLogs(ip, username, alias, INVALID_FORMAT_INPUT, "Gửi sai định dạng");
+            webhookService.sendContestLogs(payload, this.contestId, this.contestUserId, INVALID_FORMAT_INPUT, "Gửi sai định dạng");
         } 
     }
 }

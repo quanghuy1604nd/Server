@@ -12,7 +12,7 @@ import model.User;
  *
  * @author QuangHuy
  */
-public class UserDAO extends DAO {
+public class UserDAO extends AbstractDAO {
 
     private static final String SELECT_ID_BY_STUDENT_CODE_AND_IP= "SELECT id FROM \"user\" WHERE username = ? AND ip = ?";
     private static final String SELECT_ID_BY_STUDENT_CODE= "SELECT id FROM \"user\" WHERE username = ?";
@@ -22,7 +22,6 @@ public class UserDAO extends DAO {
                 PreparedStatement preparedStatement = connection.prepareStatement(SELECT_ID_BY_STUDENT_CODE_AND_IP);) {
             preparedStatement.setString(1, studentCode);
             preparedStatement.setString(2, ip);
-            System.out.println(preparedStatement);
             ResultSet resultSet = preparedStatement.executeQuery();
             if (resultSet.next()) {
                return resultSet.getLong("id");
@@ -38,7 +37,6 @@ public class UserDAO extends DAO {
         try (Connection connection = getConnection(); 
                 PreparedStatement preparedStatement = connection.prepareStatement(SELECT_ID_BY_STUDENT_CODE);) {
             preparedStatement.setString(1, studentCode);
-            System.out.println(preparedStatement);
             ResultSet resultSet = preparedStatement.executeQuery();
             if (resultSet.next()) {
                return resultSet.getLong("id");

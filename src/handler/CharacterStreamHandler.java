@@ -32,7 +32,7 @@ public class CharacterStreamHandler extends ClientHandler {
             String requestCode = reader.readLine();
             this.judge(BufferedWriter.class, BufferedReader.class, writer, reader, requestCode);
         } catch (Exception ex) {
-            webhookService.sendWebhookLogs(ip, username, alias, INVALID_FORMAT_INPUT, "Gửi sai định dạng");
+            webhookService.sendContestLogs(payload, this.contestId, this.contestUserId, INVALID_FORMAT_INPUT, "Gửi sai định dạng");
         }
     }
 }

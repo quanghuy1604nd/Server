@@ -6,7 +6,6 @@ package contest;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
-import java.io.IOException;
 import java.net.SocketTimeoutException;
 import java.util.Random;
 import static util.AppConstants.*;
@@ -27,45 +26,48 @@ public class E3 implements IExercise {
 
     @Override
     public int process() {
-        String[] extenstion = {".vn", ".com", ".edu", ".id"};
+        String[] extension = {".vn", ".com", ".edu", ".id"};
         Random random = new Random();
         StringBuilder question = new StringBuilder();
         StringBuilder answer = new StringBuilder();
-        int len = 10 + random.nextInt(10);
-        for (int cnt = 0; cnt < len; cnt++) {
-            StringBuilder sb = new StringBuilder();
-            for (int i = 0; i < random.nextInt(26); i++) {
-                char x = (char) (i + 'a');
+        int cnt = 1 + random.nextInt(5);
+
+        for (int x = 0; x < cnt; x++) {
+            int len = 1 + random.nextInt(10);  // Ensure at least one character
+            StringBuilder sb = new StringBuilder(len); // Approximate length
+            for (int i = 0; i < len; i++) {
+                char ch = (char) ('a' + random.nextInt(26));
                 if (random.nextBoolean()) {
-                    x = (char) (i + 'A');
+                    ch = Character.toUpperCase(ch);
                 }
-                sb.append(x);
+                sb.append(ch);
             }
-            int randId = random.nextInt(extenstion.length);
-            sb.append(extenstion[randId]);
+            int randId = random.nextInt(extension.length);
+            sb.append(extension[randId]);
             if (randId == 2) {
+                if (answer.length() > 0) {
+                    answer.append(", ");
+                }
                 answer.append(sb);
-                answer.append(", ");
+            }
+            if (question.length() > 0) {
+                question.append(", ");
             }
             question.append(sb);
-            question.append(", ");
         }
-        System.out.println(question);
+
         try {
-            writer.write(question.substring(0, question.length() - 2));
+            writer.write(question.toString());
             writer.flush();
             String response = reader.readLine();
-            System.out.println(response);
-            if (response.equals(answer.substring(0, answer.length() - 2))) {
+            if (response != null && response.equals(question.toString())) {
                 return ACCEPTED;
             }
             return WRONG_ANSWER;
-        } catch (Exception ex) {
-            if (ex instanceof SocketTimeoutException) {
-                return TIME_OUT;
-            }
+        } catch (SocketTimeoutException e) {
+            return TIME_OUT;
+        } catch (Exception e) {
             return INVALID_FORMAT_INPUT;
         }
     }
-
 }

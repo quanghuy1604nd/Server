@@ -14,7 +14,7 @@ import model.Contest;
  *
  * @author QuangHuy
  */
-public class ContestDAO extends DAO {
+public class ContestDAO extends AbstractDAO {
 
     private static final String SELECT_CONTEST_BY_ID = "SELECT * FROM contest WHERE id = ?";
 

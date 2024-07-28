@@ -12,17 +12,14 @@ import java.sql.ResultSet;
  *
  * @author QuangHuy
  */
-public class UserContestDAO extends DAO {
+public class ContestUserDAO extends AbstractDAO {
 
-    private static final String SELECT_USERCONTESTID_BY_USERID_AND_CONTESTID = "SELECT user_contest.id FROM user_contest INNER JOIN \"user\"  ON \"user\".id = user_contest.user_id AND \"user\".username = ? AND user_contest.contest_id = ?";
+    private static final String SELECT_USERCONTESTID_BY_USERID_AND_CONTESTID = "SELECT user_contest.id FROM contest_user WHERE user_id=? AND contest_id=?";
 
-    public Long findUserContestIdByUsernameAndContestId(String username, Long contestId) {
-
-        contestId = 1L;
-
+    public Long findContestUserByUserIdAndContestId(Long userId, Long contestId) {
         try (Connection connection = getConnection(); 
                 PreparedStatement preparedStatement = connection.prepareStatement(SELECT_USERCONTESTID_BY_USERID_AND_CONTESTID);) {
-            preparedStatement.setString(1, username);
+            preparedStatement.setLong(1, userId);
             preparedStatement.setLong(2, contestId);
             ResultSet resultSet = preparedStatement.executeQuery();
             if (resultSet.next()) {

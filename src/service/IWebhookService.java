@@ -4,12 +4,16 @@
  */
 package service;
 
+import payload.Payload;
+
 /**
  *
  * @author QuangHuy
  */
 public interface IWebhookService {
-    void sendWebhookLogs(String ip, String username, String alias, int code, String message);
-
-    public void sendWebhookUpdateScoreBoard(Long userId);
+    void sendContestLogs(Payload payload, Long contestId, Long contestUserId, int code, String message);
+    void sendRequestToUpdateContestScoreBoard(Payload payload, Long contestId, Long contestUserId);
+    
+    void sendPracticeLogs(Payload payload, int code, String message);
+    void sendRequestToUpdatePracticeScoreBoard(Payload payload, Long userId);
 }

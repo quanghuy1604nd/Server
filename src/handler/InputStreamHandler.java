@@ -19,8 +19,6 @@ public class InputStreamHandler extends ClientHandler{
         super(socket);
     }
     
-    
-    
     public void process() {
         try (InputStream is = socket.getInputStream();
                 OutputStream os = socket.getOutputStream();) {
@@ -29,7 +27,7 @@ public class InputStreamHandler extends ClientHandler{
             String requestCode = new String(buffer, 0, bytesRead);
             this.judge(InputStream.class, OutputStream.class, is, os, requestCode);
         } catch (Exception ex) {
-           webhookService.sendWebhookLogs(ip, username, alias, INVALID_FORMAT_INPUT, "Gửi sai định dạng");
+            webhookService.sendContestLogs(payload, this.contestId, this.contestUserId, INVALID_FORMAT_INPUT, "Gửi sai định dạng");
         }
     }
 }
