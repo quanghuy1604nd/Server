@@ -31,17 +31,17 @@ import java.net.Socket;
 public class ClientE6 {
 
     public static void main(String[] args) throws IOException {
-        Socket socket = new Socket("20.198.242.126", 1604);
+        Socket socket = new Socket("localhost", 1604);
         InputStream is = socket.getInputStream();
         OutputStream os = socket.getOutputStream();
-        os.write("b20dccn111;600".getBytes());
+        os.write("b20dccn111;5rVoRCuD".getBytes());
         byte[] buffer = new byte[1024];
         int bytesRead = is.read(buffer);
         String question = new String(buffer, 0, bytesRead);
         System.out.println(question);
         String[] arr = question.split("\\|");
         int ans = (int) Math.pow(Integer.parseInt(arr[0]), Integer.parseInt(arr[1]));
-        os.write((ans+"").getBytes());
+        os.write((ans+"d").getBytes());
 
         is.close();
         os.close();

@@ -14,13 +14,13 @@ public class PracticeLogPayload extends Payload{
     public PracticeLogPayload(Payload other, int code, String message) {
         super(other);
         this.code = code;
-        this.message = message;
+        this.message = message == null ? "" : message.replace("\"", "'");
     }
 
-        @Override
+    @Override
     public String toJson() {
         String json = String.format("%s, \"code\": \"%s\", \"message\": \"%s\"}",
-                                        super.toJson(), code, message);
+                                        super.toJson(), code, convertNotNull(message));
         return json;
     }
 }

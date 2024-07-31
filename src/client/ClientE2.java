@@ -4,9 +4,6 @@
  */
 package client;
 
-
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -18,7 +15,7 @@ import java.net.Socket;
  */
 public class ClientE2 implements Runnable{
     private final String studentCode;
-    private final int questionCode;
+    private final String questionCode;
     private final String serverAddress;
     private final int serverPort;
     private Socket client;
@@ -31,7 +28,7 @@ public class ClientE2 implements Runnable{
         }
         return sum;
     }
-    public ClientE2(String studentCode, int questionCode, String serverAddress, int serverPort) {
+    public ClientE2(String studentCode, String questionCode, String serverAddress, int serverPort) {
         this.studentCode = studentCode;
         this.questionCode = questionCode;
         this.serverAddress = serverAddress;
@@ -56,7 +53,7 @@ public class ClientE2 implements Runnable{
             System.out.println("question: " + question);
 
             // send back to server
-            os.write((sum+"1").getBytes());
+            os.write((sum+"ds").getBytes());
             is.close();
             os.close();
             System.out.println("---------End--------");
@@ -80,9 +77,9 @@ public class ClientE2 implements Runnable{
         }
     }
     public static void main(String[] args) throws IOException, InterruptedException {
-        String studentCode = "b20dccn111";
-        int questionCode = 202;
-        String serverAddress = "20.198.242.126";
+        String studentCode = "b20dccn099";
+        String questionCode = "wAmSE9qM";
+        String serverAddress = "localhost";
         int serverPort = 1604;
         ClientE2 client = new ClientE2(studentCode, questionCode, serverAddress, serverPort);
         client.run();

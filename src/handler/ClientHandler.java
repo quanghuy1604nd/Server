@@ -18,24 +18,26 @@ import dao.UserDAO;
 import dao.ContestUserExerciseDAO;
 import dao.PracticeSubmissionDAO;
 import dao.PracticeUserExerciseDAO;
+import exception.ForbiddenException;
+import exception.InvalidInputFormatException;
+import exception.MalformedRequestCodeException;
+import exception.WrongExerciseException;
 import java.io.IOException;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.net.InetSocketAddress;
 import java.net.Socket;
+import java.net.SocketTimeoutException;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 import model.Contest;
 import payload.Payload;
 import service.IWebhookService;
 import service.WebhookServiceImpl;
 import static util.AppConstants.*;
+import util.Helper;
 
 public class ClientHandler implements Runnable {
 
@@ -52,8 +54,11 @@ public class ClientHandler implements Runnable {
     protected PracticeSubmissionDAO practiceSubmissionDAO;
     protected IWebhookService webhookService;
 
+    protected Helper helper;
+
     protected int type;
     protected Payload payload;
+    protected Long test;
 
     protected Long contestId;
     protected Long contestUserExerciseId;
@@ -67,6 +72,7 @@ public class ClientHandler implements Runnable {
     public ClientHandler(Socket socket) {
         this.socket = socket;
         this.payload = new Payload();
+        this.helper = new Helper();
         this.payload.setIp(((InetSocketAddress) socket.getRemoteSocketAddress()).getAddress().getHostAddress());
         this.userDAO = new UserDAO();
         this.exerciseDAO = new ExerciseDAO();
@@ -89,28 +95,71 @@ public class ClientHandler implements Runnable {
 
     @Override
     public void run() {
+        String message = "";
+        int code;
         try {
             socket.setSoTimeout(TIME_OUT_DURATION);
+//            webhookService.sendPracticeLogs(payload, CONNECT_SUCCESS, "");
+            int result = -1;
             switch (socket.getLocalPort()) {
                 case INPUT_STREAM_PORT -> {
-                    InputStreamHandler inputStreamHandler = new InputStreamHandler(this.socket);
-                    inputStreamHandler.process();
-
+                    InputStreamJudge inputStreamJudge = new InputStreamJudge(this.socket);
+                    String requestCode = inputStreamJudge.getRequestCode();
+                    validate(requestCode);
+                    result = inputStreamJudge.process(this.exerciseId);
                 }
                 case DATA_STREAM_PORT -> {
-                    DataStreamHandler dataStreamHandler = new DataStreamHandler(this.socket);
-                    dataStreamHandler.process();
+                    DataStreamJudge dataStreamJudge = new DataStreamJudge(this.socket);
+                    String requestCode = dataStreamJudge.getRequestCode();
+                    validate(requestCode);
+                    result = dataStreamJudge.process(this.exerciseId);
                 }
                 case CHARACTER_STREAM_PORT -> {
-                    CharacterStreamHandler characterStreamHandler = new CharacterStreamHandler(this.socket);
-                    characterStreamHandler.process();
+                    CharacterStreamJudge characterStreamJudge = new CharacterStreamJudge(this.socket);
+                    String requestCode = characterStreamJudge.getRequestCode();
+                    validate(requestCode);
+                    result = characterStreamJudge.process(this.exerciseId);
                 }
                 case OBJECT_STREAM_PORT -> {
                 }
-                default ->
-                    System.out.println("Unknown stream type");
+                default -> {
+                    throw new InvalidInputFormatException("s");
+                }
             }
-        } catch (IOException ex) {
+            if (result != -1) {
+                updatePracticeExerciseStatus(result);
+            }
+
+        } catch (Exception ex) { // Bắt tất cả các ngoại lệ và xử lý riêng biệt bằng instanceof
+            message = ex.getMessage();
+            if (ex instanceof SocketTimeoutException) {
+                code = TIME_OUT;
+            } else if (ex instanceof InvalidInputFormatException invalidInputFormatException) {
+                code = invalidInputFormatException.getCode();
+            } else if (ex instanceof ForbiddenException forbiddenException) {
+                code = forbiddenException.getCode();
+            } else if (ex instanceof WrongExerciseException wrongExerciseException) {
+                code = wrongExerciseException.getCode();
+            } else if (ex instanceof MalformedRequestCodeException malformedRequestCodeException) {
+                code = malformedRequestCodeException.getCode();
+                message = ex.getMessage();
+            } else if (ex instanceof IOException) {
+                code = INVALID_FORMAT_INPUT;
+                message = ex.getMessage();
+            } else if (ex instanceof InvocationTargetException) {
+                // lỗi trong quá trình giao tiếp
+                Throwable cause = ex.getCause();
+                if (cause instanceof SocketTimeoutException) {
+                    code = TIME_OUT;
+                } else {
+                    code = INVALID_FORMAT_INPUT;
+                }
+                message = cause.getMessage();
+            } else {
+                code = INVALID_FORMAT_INPUT;
+            }
+            webhookService.sendPracticeLogs(payload, code, message);
+
         } finally {
             shutdown();
         }
@@ -129,72 +178,42 @@ public class ClientHandler implements Runnable {
         return !(nowInVietnam.isBefore(contest.getStartTime()) || nowInVietnam.isAfter(contest.getEndTime()));
     }
 
-    public boolean isValidateRequestCode(String requestCode) {
-        String regexRequest = "^[Bb]\\d{2}[A-Za-z]{4}\\d{3};[a-zA-Z0-9]{7,8}$";
-        Pattern pattern = Pattern.compile(regexRequest);
-        Matcher matcher = pattern.matcher(requestCode);
-        return matcher.matches();
-    }
-
-    public String getResultMessage(int code) {
-        String message;
-        switch (code) {
-            case TIME_OUT ->
-                message = "Quá thời gian!";
-            case INVALID_FORMAT_INPUT ->
-                message = "Gửi sai định dạng";
-            case WRONG_ANSWER ->
-                message = "Sai kết quả";
-            case ACCEPTED ->
-                message = "Hoàn thành";
-            default ->
-                message = "Lỗi server ???";
-        }
-        return message;
-    }
-
     public void updatePracticeExerciseStatus(int code) {
-        String message = getResultMessage(code);
-        webhookService.sendPracticeLogs(payload, code, message);
         if (code == ACCEPTED) {
             practiceUserExerciseDAO.updateContestUserExercise(practiceUserExerciseId, code == ACCEPTED);
         }
         practiceSubmissionDAO.insertPracticeSubmission(practiceUserExerciseId, LocalDateTime.now(), code == ACCEPTED, "");
+        webhookService.sendPracticeLogs(payload, code, "");
         webhookService.sendRequestToUpdatePracticeScoreBoard(payload, this.userId);
     }
 
     public void updateContestExerciseStatus(int code) {
-        String message = getResultMessage(code);
-        webhookService.sendContestLogs(payload, this.contestId, this.contestUserId, code, message);
         if (code == ACCEPTED) {
             contestUserExerciseDAO.updateContestUserExercise(contestUserExerciseId, code == ACCEPTED);
         }
         contestSubmissionDAO.insertContestSubmission(contestUserExerciseId, LocalDateTime.now(), code == ACCEPTED, "");
+        webhookService.sendContestLogs(payload, contestId, contestUserId, code, "");
         webhookService.sendRequestToUpdateContestScoreBoard(payload, this.contestId, this.contestUserId);
     }
 
-    public boolean isValidPracticeExercise() {
-        userId = userDAO.findUserIdByStudentCode(payload.getUsername());
+    public void validatePracticeExercise() {
+        userId = userDAO.findUserIdByStudentCodeAndIP(payload.getUsername(), payload.getIp());
+//        userId = userDAO.findUserIdByStudentCode(payload.getUsername());
         if (userId == null) {
-            String message = "Chưa đăng kí hoặc IP không trùng khớp!";
-            webhookService.sendPracticeLogs(payload, FORBIDDEN, message);
-            shutdown();
-            return false;
+            String message = "Chưa đăng kí hoặc IP " + payload.getIp() +" không trùng khớp!";
+            throw new ForbiddenException(message);
         }
         practiceUserExerciseId = practiceUserExerciseDAO.findPracticeUserExerciseByAliasCode(payload.getAlias());
         if (practiceUserExerciseId == null) {
             String message = "Mã bài tập không hợp lệ!";
-            webhookService.sendPracticeLogs(payload, REQUEST_WRONG_EXERCISE, message);
-            shutdown();
-            return false;
+            throw new WrongExerciseException(message);
         }
         exerciseId = exerciseDAO.findExerciseByAliasCode(payload.getAlias());
-        return true;
     }
 
     public boolean isValidContestExercise() {
-//        userId = userDAO.findUserIdByStudentCodeAndIP(payload.getUsername(), payload.getIp());
-        userId = userDAO.findUserIdByStudentCode(payload.getUsername());
+        userId = userDAO.findUserIdByStudentCodeAndIP(payload.getUsername(), payload.getIp());
+//        userId = userDAO.findUserIdByStudentCode(payload.getUsername());
         if (userId == null) {
             String message = "Chưa đăng kí hoặc IP không trùng khớp!";
             webhookService.sendContestLogs(payload, this.contestId, this.contestUserId, FORBIDDEN, message);
@@ -208,7 +227,6 @@ public class ClientHandler implements Runnable {
             webhookService.sendContestLogs(payload, this.contestId, this.contestUserId, FORBIDDEN, message);
             shutdown();
             return false;
-
         }
         exerciseId = exerciseDAO.findExerciseByAliasCode(payload.getAlias());
         if (exerciseId == null) {
@@ -235,50 +253,26 @@ public class ClientHandler implements Runnable {
         }
     }
 
-    public boolean isValid(String requestCode) {
-        if (isValidateRequestCode(requestCode)) {
+    public void validate(String requestCode) {
+        if (helper.isValidateRequestCode(requestCode)) {
             String[] code = requestCode.split(";");
             String username = code[0];
             String alias = code[1];
-
             payload.setUsername(username);
             payload.setAlias(alias);
-            if (alias.length() == ALIAS_PRACTICE_LENGTH) {
-                this.type = PRACTICE_TYPE;
-                this.initPracticeDAO();
-                return isValidPracticeExercise();
-            } else if (alias.length() == ALIAS_CONTEST_LENGTH) {
-                this.type = CONTEST_TYPE;
+//            if (alias.length() == ALIAS_PRACTICE_LENGTH) {
+//                this.type = PRACTICE_TYPE;
+            this.initPracticeDAO();
+            validatePracticeExercise();
+//            } else if (alias.length() == ALIAS_CONTEST_LENGTH) {
+//                this.type = CONTEST_TYPE;
 //                this.initContestDAO();
 //                return isValidContestExercise();
-            }
-        }
-//        System.out.println("Contest is over!");
-        shutdown();
-        return false;
-    }
-
-    public void judge(Class inputClass, Class outputClass, Object input, Object output, String requestCode) {
-        if (isValid(requestCode)) {
-            try {
-                Class clazz = Class.forName("contest.E" + this.exerciseId);
-                Constructor<?> constructor = clazz.getConstructor(inputClass, outputClass);
-                Object instance = constructor.newInstance(input, output);
-                Method process = clazz.getMethod("process");
-                int result = (int) process.invoke(instance);
-
-                if (this.type == CONTEST_TYPE) {
-                    this.updateContestExerciseStatus(result);
-                } else {
-                    this.updatePracticeExerciseStatus(result);
-                }
-            } catch (ClassNotFoundException | NoSuchMethodException | SecurityException | InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException ex) {
-                Logger.getLogger(ClientHandler.class.getName()).log(Level.SEVERE, null, ex);
-            }
+//            }
         } else {
-            
+//            throw new MalformedRequestCodeException(requestCode);
+            // not throw => Not send
         }
-        shutdown();
     }
 
     public void shutdown() {

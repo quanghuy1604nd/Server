@@ -12,15 +12,13 @@ import static util.AppConstants.ACCEPTED;
 import static util.AppConstants.INVALID_FORMAT_INPUT;
 import static util.AppConstants.TIME_OUT;
 import static util.AppConstants.WRONG_ANSWER;
+import util.Pair;
 
 /**
  *
  * @author QuangHuy
  */
-public class E5 implements IExercise {
-
-    private final DataInputStream dis;
-    private final DataOutputStream dos;
+public class E5 extends AbstractExercise {
 
     public E5(DataInputStream dis, DataOutputStream dos) {
         this.dis = dis;
@@ -39,23 +37,12 @@ public class E5 implements IExercise {
     }
 
     @Override
-    public int process() {
-        try {
-            String question = generate();
-            dos.writeUTF(question);
-            String clientResponse = dis.readUTF();
-            StringBuilder sb = new StringBuilder(clientResponse);
-            if (question.equals(sb.reverse().toString())) {
-                return ACCEPTED;
-            }
-            return WRONG_ANSWER;
-        } catch (Exception ex) {
-            if (ex instanceof SocketTimeoutException) {
-                return TIME_OUT;
-            }
-            return INVALID_FORMAT_INPUT;
-        }
-
+    public Pair<String, String> communicate() throws Exception {
+        String question = generate();
+        dos.writeUTF(question);
+        String clientResponse = dis.readUTF();
+        StringBuilder sb = new StringBuilder(clientResponse);
+        return new Pair<>(question, sb.reverse().toString());
     }
 
 }

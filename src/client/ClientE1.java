@@ -15,13 +15,15 @@ import java.net.Socket;
  */
 public class ClientE1 {
 
-    public static void main(String[] args) throws IOException {
-        Socket socket = new Socket("localhost", 1605);
+    public static void main(String[] args) throws IOException, InterruptedException {
+        Socket socket = new Socket("localhost", 1604);
         DataInputStream dis = new DataInputStream(socket.getInputStream());
         DataOutputStream dos = new DataOutputStream(socket.getOutputStream());
-        dos.writeUTF("b20dccn100;Yp83J7Th");
+        dos.writeUTF("b20dccn111;et4a817m");
         int a = dis.readInt();
         int b = dis.readInt();
+                Thread.sleep(6000);
+
         dos.writeInt(a + b);
         dos.writeInt(a - b);
         dos.writeInt(a * b);

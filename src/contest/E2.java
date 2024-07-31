@@ -6,18 +6,14 @@ package contest;
 
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.net.SocketTimeoutException;
 import java.util.Random;
-import static util.AppConstants.*;
+import util.Pair;
 
 /**
  *
  * @author QuangHuy
  */
-public class E2 implements IExercise {
-
-    private final InputStream is;
-    private final OutputStream os;
+public class E2 extends AbstractExercise {
 
     public E2(InputStream is, OutputStream os) {
         this.is = is;
@@ -52,31 +48,16 @@ public class E2 implements IExercise {
     }
 
     @Override
-    public int process() {
-        try {
-            // gen 4 number
-            int[] randArr = genRandomArr(4);
-            // gen question from 4 number
-            String question = genQuestion(randArr);
-            os.write(question.getBytes());
-
-            byte[] buffer = new byte[1024];
-            int bytesRead = is.read(buffer);
-            String clientResponse = new String(buffer, 0, bytesRead);
-            
-            int response = Integer.parseInt(clientResponse);
-            // get client answer
-            int serverAns = getAnswer(randArr);
-            if(response == serverAns) {
-                return ACCEPTED;
-            } return WRONG_ANSWER;
-        } catch (Exception ex) {
-            if(ex instanceof SocketTimeoutException) {
-                return TIME_OUT;
-            } else if(ex instanceof NumberFormatException) {
-                return WRONG_ANSWER;
-            }
-            return INVALID_FORMAT_INPUT;
-        }
+    public Pair<String, String> communicate() throws Exception {
+        // gen 4 number
+        int[] randArr = genRandomArr(4);
+        // gen question from 4 number
+        String question = genQuestion(randArr);
+        os.write(question.getBytes());
+        byte[] buffer = new byte[1024];
+        int bytesRead = is.read(buffer);
+        String clientResponse = new String(buffer, 0, bytesRead);
+        int response = Integer.parseInt(clientResponse);
+        return new Pair<>(getAnswer(randArr) + "", response +"");
     }
 }

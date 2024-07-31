@@ -10,14 +10,13 @@ package payload;
  */
 public class Payload {
 
-    protected String username;
     protected String ip;
     protected String alias;
+    protected String username;
 
     public Payload() {
     }
     
-
     public Payload(String username, String ip, String alias) {
         this.username = username;
         this.ip = ip;
@@ -52,11 +51,18 @@ public class Payload {
     public void setAlias(String alias) {
         this.alias = alias;
     }
+    public String convertNotNull(String attr) {
+        if (attr == null) {
+            return "";
+        }
+        return attr;
+    }
+    
 
     
     public String toJson() {
         String json = String.format("{\"username\": \"%s\", \"ip\": \"%s\", \"alias\": \"%s\"",
-                                        username, ip, alias);
+                                        convertNotNull(username), convertNotNull(ip), convertNotNull(alias));
         return json;
     };
         

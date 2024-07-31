@@ -12,15 +12,13 @@ import static util.AppConstants.ACCEPTED;
 import static util.AppConstants.INVALID_FORMAT_INPUT;
 import static util.AppConstants.TIME_OUT;
 import static util.AppConstants.WRONG_ANSWER;
+import util.Pair;
 
 /**
  *
  * @author QuangHuy
  */
-public class E7 implements IExercise {
-
-    private final BufferedWriter writer;
-    private final BufferedReader reader;
+public class E7 extends AbstractExercise {
 
     public E7(BufferedWriter writer, BufferedReader reader) {
         this.writer = writer;
@@ -29,7 +27,7 @@ public class E7 implements IExercise {
     private static String src = "abcdefghijklmnopqrstuvwxyz";
 
     @Override
-    public int process() {
+    public Pair<String, String> communicate() throws Exception {
         Random rand = new Random();
         int len = 20 + rand.nextInt(40);
         StringBuilder sb = new StringBuilder();
@@ -43,20 +41,10 @@ public class E7 implements IExercise {
         }
         String question = sb.toString();
         String answer = as.toString();
-        try {
-            writer.write(question + "\n");
-            writer.flush();
-            String response = reader.readLine();
-            if (response.equals(answer)) {
-                return ACCEPTED;
-            }
-            return WRONG_ANSWER;
-        } catch (Exception ex) {
-            if (ex instanceof SocketTimeoutException) {
-                return TIME_OUT;
-            }
-            return INVALID_FORMAT_INPUT;
-        }
+        writer.write(question + "\n");
+        writer.flush();
+        String response = reader.readLine();
+        return new Pair<>(response, answer);
     }
 
 }

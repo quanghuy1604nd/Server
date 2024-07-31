@@ -6,18 +6,14 @@ package contest;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
-import java.net.SocketTimeoutException;
 import java.util.Random;
-import static util.AppConstants.*;
+import util.Pair;
 
 /**
  *
  * @author QuangHuy
  */
-public class E3 implements IExercise {
-
-    private final BufferedWriter writer;
-    private final BufferedReader reader;
+public class E3 extends AbstractExercise {
 
     public E3(BufferedWriter writer, BufferedReader reader) {
         this.writer = writer;
@@ -25,12 +21,12 @@ public class E3 implements IExercise {
     }
 
     @Override
-    public int process() {
+    public Pair<String, String> communicate() throws Exception {
         String[] extension = {".vn", ".com", ".edu", ".id"};
         Random random = new Random();
         StringBuilder question = new StringBuilder();
         StringBuilder answer = new StringBuilder();
-        int cnt = 1 + random.nextInt(5);
+        int cnt = 5 + random.nextInt(10);
 
         for (int x = 0; x < cnt; x++) {
             int len = 1 + random.nextInt(10);  // Ensure at least one character
@@ -56,18 +52,9 @@ public class E3 implements IExercise {
             question.append(sb);
         }
 
-        try {
-            writer.write(question.toString());
-            writer.flush();
-            String response = reader.readLine();
-            if (response != null && response.equals(question.toString())) {
-                return ACCEPTED;
-            }
-            return WRONG_ANSWER;
-        } catch (SocketTimeoutException e) {
-            return TIME_OUT;
-        } catch (Exception e) {
-            return INVALID_FORMAT_INPUT;
-        }
+        writer.write(question.toString() + "\n");
+        writer.flush();
+        String response = reader.readLine();
+        return new Pair<>(answer.toString(), response);
     }
 }

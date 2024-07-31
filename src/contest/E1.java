@@ -6,17 +6,13 @@ package contest;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
-import java.net.SocketTimeoutException;
-import static util.AppConstants.*;
+import util.Pair;
 
 /**
  *
  * @author QuangHuy
  */
-public class E1 implements IExercise {
-
-    private final DataInputStream dis;
-    private final DataOutputStream dos;
+public class E1 extends AbstractExercise {
 
     public E1(DataInputStream dis, DataOutputStream dos) {
         this.dis = dis;
@@ -24,27 +20,19 @@ public class E1 implements IExercise {
     }
 
     @Override
-    public int process() {
-        try {
-            int randNum1 = (int) (Math.random() * 20);
-            int randNum2 = (int) (Math.random() * 20);
-            int answerSum = randNum1 + randNum2;
-            int answerDiff = randNum1 - randNum2;
-            int answerMult = randNum1 * randNum2;
-            dos.writeInt(randNum1);
-            dos.writeInt(randNum2);
-            int sum = dis.readInt();
-            int diff = dis.readInt();
-            int mult = dis.readInt();
-            if(sum == answerSum && diff == answerDiff && mult == answerMult ) {
-                return ACCEPTED;
-            } return WRONG_ANSWER;
-        } catch (Exception ex) {
-            if(ex instanceof SocketTimeoutException) {
-                return TIME_OUT;
-            }
-            return INVALID_FORMAT_INPUT;
-        }
+    public Pair<String, String> communicate() throws Exception {
+        int randNum1 = (int) (Math.random() * 20);
+        int randNum2 = (int) (Math.random() * 20);
+        int answerSum = randNum1 + randNum2;
+        int answerDiff = randNum1 - randNum2;
+        int answerMult = randNum1 * randNum2;
+        dos.writeInt(randNum1);
+        dos.writeInt(randNum2);
+        int sum = dis.readInt();
+        int diff = dis.readInt();
+        int mult = dis.readInt();
+        return new Pair<>(answerSum + " " + answerDiff + " " +answerMult, 
+                          sum + " " + diff + " " + mult);
     }
 
 }
