@@ -97,7 +97,6 @@ public class WebhookServiceImpl implements IWebhookService {
             conn.setRequestProperty("Content-Type", "application/json");
             conn.setRequestProperty("secret-token", WEBHOOK_TOKEN);
             conn.setDoOutput(true);
-            payload.setIp("58.187.120.109");
             PracticeLogPayload practiceLogPayload = new PracticeLogPayload(payload, code, message);
             try (OutputStream os = conn.getOutputStream()) {
                 byte[] input = practiceLogPayload.toJson().getBytes("utf-8");
@@ -108,7 +107,8 @@ public class WebhookServiceImpl implements IWebhookService {
             if (responseCode == HttpURLConnection.HTTP_OK) {
 //                System.out.println("Webhook sent successfully.");
             } else {
-//                System.out.println("PRACTICE LOG: Failed to send webhook. Response code: " + responseCode);
+                System.out.println(practiceLogPayload.toJson());
+                System.out.println("PRACTICE LOG: Failed to send webhook. Response code: " + responseCode);
 
             }
         } catch (IOException e) {
@@ -130,8 +130,6 @@ public class WebhookServiceImpl implements IWebhookService {
             conn.setRequestProperty("Content-Type", "application/json");
             conn.setRequestProperty("secret-token", WEBHOOK_TOKEN);
             conn.setDoOutput(true);
-                        payload.setIp("58.187.120.109");
-
             PracticeScoreBoardPayload practiceScoreBoardPayload = new PracticeScoreBoardPayload(payload, userId);
             try (OutputStream os = conn.getOutputStream()) {
                 byte[] input = practiceScoreBoardPayload.toJson().getBytes("utf-8");
@@ -142,7 +140,8 @@ public class WebhookServiceImpl implements IWebhookService {
             if (responseCode == HttpURLConnection.HTTP_OK) {
 //                System.out.println("Webhook sent successfully.");
             } else {
-//                System.out.println("PRACTICE SCOREBOARD: Failed to send webhook. Response code: " + responseCode);
+                System.out.println(practiceScoreBoardPayload.toJson());
+                System.out.println("PRACTICE SCOREBOARD: Failed to send webhook. Response code: " + responseCode);
             }
         } catch (IOException e) {
             System.out.println("PRACTICE SCOREBOARD: Cannot connect to Spring Boot server");
