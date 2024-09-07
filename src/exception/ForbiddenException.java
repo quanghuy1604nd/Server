@@ -4,7 +4,8 @@
  */
 package exception;
 
-import static util.AppConstants.FORBIDDEN;
+import static utils.AppConstants.ProcessCodeConstants.FORBIDDEN;
+
 
 /**
  *

@@ -4,13 +4,14 @@
  */
 package handler;
 
+import exception.StepErrorException;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.net.Socket;
-import util.Helper;
+import utils.Pair;
 
 /**
  *
@@ -26,12 +27,18 @@ public class CharacterStreamJudge extends Judge {
         this.reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
     }
 
-    public String getRequestCode() throws IOException {
-        String requestCode = reader.readLine();
-        return requestCode;
+    @Override
+    public Pair<String, String> extractClientInfo() throws Exception {
+        try {
+            String requestCode = reader.readLine();
+            return validate(requestCode);
+        } catch (Exception ex) {
+            throw new StepErrorException(1, ex);
+        }
     }
-
-    public int process(Long exerciseId) throws Exception {
-        return this.judge(BufferedWriter.class, BufferedReader.class, writer, reader, exerciseId);
+    
+    @Override
+    public int process(String questionCode) throws Exception {
+        return this.judge(BufferedWriter.class, BufferedReader.class, writer, reader, questionCode);
     }
 }

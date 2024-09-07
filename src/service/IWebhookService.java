@@ -11,9 +11,6 @@ import payload.Payload;
  * @author QuangHuy
  */
 public interface IWebhookService {
-    void sendContestLogs(Payload payload, Long contestId, Long contestUserId, int code, String message);
-    void sendRequestToUpdateContestScoreBoard(Payload payload, Long contestId, Long contestUserId);
-    
-    void sendPracticeLogs(Payload payload, int code, String message);
-    void sendRequestToUpdatePracticeScoreBoard(Payload payload, Long userId);
+    void sendExamLogs(Payload payload, Long examId, Long examUserId, int code, String message);
+    void sendRequestToUpdateExamRank(Payload payload, Long examId, Long examUserId);
 }

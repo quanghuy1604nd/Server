@@ -4,11 +4,10 @@
  */
 package server;
 
+//import handler.ClientHandler;
 import handler.ClientHandler;
 import java.io.IOException;
-import java.net.InetAddress;
 import java.net.InetSocketAddress;
-import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.Map;
 import java.util.Set;
@@ -17,7 +16,9 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
-import util.AppConstants;
+import utils.AppConstants;
+import static utils.AppConstants.AppConfiguration.MAX_CONNECTION_PER_MINUTE;
+import static utils.AppConstants.AppConfiguration.WAITING_TIME;
 
 /**
  *
@@ -59,7 +60,7 @@ public class Filter {
             this.requestCounts.put(clientIP, count + 1);
             if (isSpam(clientIP, count + 1)) {
                 String message = String.format("IP: %s reach limit %d request per %s -> Denied, Wait for %d %s\n",
-                        clientIP, AppConstants.MAX_CONNECTION_PER_MINUTE, TimeUnit.SECONDS, AppConstants.WAITING_TIME, TimeUnit.SECONDS);
+                        clientIP, MAX_CONNECTION_PER_MINUTE, TimeUnit.SECONDS, WAITING_TIME, TimeUnit.SECONDS);
                 this.closeClientSocket(client);
             } else {
                 ClientHandler handler = new ClientHandler(client);
@@ -76,8 +77,8 @@ public class Filter {
     }
 
     public boolean isSpam(String clientIP, int requestCounts) {
-        if (requestCounts > AppConstants.MAX_CONNECTION_PER_MINUTE) {
-            this.remainDeniedTime.put(clientIP, AppConstants.WAITING_TIME);
+        if (requestCounts > MAX_CONNECTION_PER_MINUTE) {
+            this.remainDeniedTime.put(clientIP, WAITING_TIME);
             return true;
         }
         return false;

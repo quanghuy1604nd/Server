@@ -4,7 +4,8 @@
  */
 package exception;
 
-import static util.AppConstants.REQUEST_WRONG_EXERCISE;
+import static utils.AppConstants.ProcessCodeConstants.REQUEST_WRONG_EXERCISE;
+
 
 /**
  *

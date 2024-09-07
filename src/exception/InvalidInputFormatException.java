@@ -4,7 +4,7 @@
  */
 package exception;
 
-import static util.AppConstants.INVALID_FORMAT_INPUT;
+import static utils.AppConstants.ProcessCodeConstants.EXCEPTION;
 
 /**
  *
@@ -12,7 +12,7 @@ import static util.AppConstants.INVALID_FORMAT_INPUT;
  */
 public class InvalidInputFormatException extends BaseException {
 
-    public final int code = INVALID_FORMAT_INPUT;
+    public final int code = EXCEPTION;
 
     public InvalidInputFormatException(String message) {
         super(message);

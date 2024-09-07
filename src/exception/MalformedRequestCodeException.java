@@ -4,7 +4,7 @@
  */
 package exception;
 
-import static util.AppConstants.MALFORMED_REQUEST_CODE;
+import static utils.AppConstants.ProcessCodeConstants.MALFORMED_REQUEST_CODE;
 
 /**
  *

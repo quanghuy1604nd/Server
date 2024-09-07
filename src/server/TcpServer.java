@@ -6,7 +6,9 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import static util.AppConstants.*;
+import static utils.AppConstants.*;
+import static utils.AppConstants.AppConfiguration.MAX_CONNECTION;
+import static utils.AppConstants.PortConfiguration.*;
 
 /**
  * TcpServer class to handle multiple types of streams.

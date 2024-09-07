@@ -13,10 +13,10 @@ import java.sql.ResultSet;
  * @author QuangHuy
  */
 public class AliasDAO extends AbstractDAO{
-    private static final String SELECT_ALIASID_BY_CODE_AND_ACTIVE = "SELECT * FROM alias WHERE code = ? AND active = ?";
+    private static final String SELECT_ID_BY_NAME_AND_ACTIVE = "SELECT * FROM alias WHERE code = ? AND active = ?";
 
     public Long findAliasIdByCode(String code) {
-        try (Connection connection = getConnection(); PreparedStatement preparedStatement = connection.prepareStatement(SELECT_ALIASID_BY_CODE_AND_ACTIVE);) {
+        try (Connection connection = getConnection(); PreparedStatement preparedStatement = connection.prepareStatement(SELECT_ID_BY_NAME_AND_ACTIVE);) {
             preparedStatement.setString(1, code);
             preparedStatement.setBoolean(2, true);
             ResultSet resultSet = preparedStatement.executeQuery();

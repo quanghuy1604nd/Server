@@ -53,7 +53,7 @@ public class ClientE2 implements Runnable{
             System.out.println("question: " + question);
 
             // send back to server
-            os.write((sum+"ds").getBytes());
+            os.write((sum+"").getBytes());
             is.close();
             os.close();
             System.out.println("---------End--------");
@@ -77,8 +77,8 @@ public class ClientE2 implements Runnable{
         }
     }
     public static void main(String[] args) throws IOException, InterruptedException {
-        String studentCode = "b20dccn099";
-        String questionCode = "wAmSE9qM";
+        String studentCode = "b20dccn990";
+        String questionCode = "jcfFgD3";
         String serverAddress = "localhost";
         int serverPort = 1604;
         ClientE2 client = new ClientE2(studentCode, questionCode, serverAddress, serverPort);

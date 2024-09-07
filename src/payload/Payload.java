@@ -10,38 +10,32 @@ package payload;
  */
 public class Payload {
 
-    protected String ip;
+    protected String ipAddress;
     protected String alias;
     protected String username;
 
     public Payload() {
     }
     
-    public Payload(String username, String ip, String alias) {
-        this.username = username;
-        this.ip = ip;
-        this.alias = alias;
-    }
+   
     public Payload(Payload other) {
         this.username = other.username;
-        this.ip = other.ip;
+        this.ipAddress = other.ipAddress;
         this.alias = other.alias;
     }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
+    
+    public Payload(String ipAddress, String alias, String username) {
+        this.ipAddress = ipAddress;
+        this.alias = alias;
         this.username = username;
     }
 
-    public String getIp() {
-        return ip;
+    public String getIpAddress() {
+        return ipAddress;
     }
 
-    public void setIp(String ip) {
-        this.ip = ip;
+    public void setIpAddress(String ipAddress) {
+        this.ipAddress = ipAddress;
     }
 
     public String getAlias() {
@@ -51,6 +45,15 @@ public class Payload {
     public void setAlias(String alias) {
         this.alias = alias;
     }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+    
     public String convertNotNull(String attr) {
         if (attr == null) {
             return "";
@@ -58,11 +61,9 @@ public class Payload {
         return attr;
     }
     
-
-    
     public String toJson() {
         String json = String.format("{\"username\": \"%s\", \"ip\": \"%s\", \"alias\": \"%s\"",
-                                        convertNotNull(username), convertNotNull(ip), convertNotNull(alias));
+                                        convertNotNull(username), convertNotNull(ipAddress), convertNotNull(alias));
         return json;
     };
         

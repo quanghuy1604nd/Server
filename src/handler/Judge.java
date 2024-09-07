@@ -4,20 +4,37 @@
  */
 package handler;
 
+import exception.MalformedRequestCodeException;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
+import static utils.Helper.isValidateRequestCode;
+import utils.Pair;
 
 /**
  *
  * @author QuangHuy
  */
-public class Judge {
-    public int judge(Class inputClass, Class outputClass, Object input, Object output, Long exerciseId) throws Exception {
-        Class clazz = Class.forName("contest.E" + exerciseId);
+public abstract class Judge {
+
+    public Pair<String, String> validate(String requestCode) {
+        if (isValidateRequestCode(requestCode)) {
+            String[] code = requestCode.split(";");
+            String username = code[0];
+            String alias = code[1];
+            return new Pair<>(username, alias);
+        } else {
+            throw new MalformedRequestCodeException(String.format("request code %s is not invalid", requestCode));
+        }
+    }
+
+    public int judge(Class inputClass, Class outputClass, Object input, Object output, String questionCode) throws Exception {
+        Class clazz = Class.forName("question." + questionCode);
         Constructor<?> constructor = clazz.getConstructor(inputClass, outputClass);
         Object instance = constructor.newInstance(input, output);
         Method process = clazz.getMethod("process");
         int result = (int) process.invoke(instance);
         return result;
     }
+    abstract Pair<String, String> extractClientInfo() throws Exception;
+    abstract int process(String questionCode) throws Exception;
 }

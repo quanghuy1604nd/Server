@@ -18,10 +18,10 @@ public class ClientE5 {
         Socket socket = new Socket("localhost", 1605);
         DataInputStream dis = new DataInputStream(socket.getInputStream());
         DataOutputStream dos = new DataOutputStream(socket.getOutputStream());
-        dos.writeUTF("b20dccn099;285L35VK");
+        dos.writeUTF("b20dccn990;lSWDUbe");
         String question = dis.readUTF();
         StringBuilder sb = new StringBuilder(question);
-        dos.writeUTF(sb.reverse().toString());
+        dos.writeUTF(sb.reverse().toString()+"d");
         
         dis.close();
         dos.close();

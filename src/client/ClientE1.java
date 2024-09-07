@@ -16,23 +16,24 @@ import java.net.Socket;
 public class ClientE1 {
 
     public static void main(String[] args) throws IOException, InterruptedException {
-        Socket socket = new Socket("20.198.242.126", 1605);
+        Socket socket = new Socket("localhost", 1605);
         DataInputStream dis = new DataInputStream(socket.getInputStream());
         DataOutputStream dos = new DataOutputStream(socket.getOutputStream());
-        dos.writeUTF("b00dccn000;FiBqZn2X");
-        
+
+        dos.writeUTF("b20dccn990;eQhRvOt");
+
         int a = dis.readInt();
         int b = dis.readInt();
         System.out.println(a + " " + b);
-//                Thread.sleep(6000);
+                                        Thread.sleep(6000);
 
         dos.writeInt(a + b);
         dos.writeInt(a - b);
         dos.writeInt(a * b);
-        
+        Thread.sleep(6000);
         dis.close();
         dos.close();
         socket.close();
-        
+
     }
 }

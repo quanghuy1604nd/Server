@@ -4,46 +4,47 @@
  */
 package model;
 
+import java.util.UUID;
+
 /**
  *
  * @author QuangHuy
  */
 public class User {
-    private Long id;
-    private String studentCode;
-    private String ip;
+    private UUID id;
+    private String username;
+    private String ipAddress;
 
-    public User() {
-    }
-    
-    public User(Long id, String studentCode, String ip) {
+    public User(UUID id, String username, String ipAddress) {
         this.id = id;
-        this.studentCode = studentCode;
-        this.ip = ip;
+        this.username = username;
+        this.ipAddress = ipAddress;
     }
 
-    public Long getId() {
+    public UUID getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(UUID id) {
         this.id = id;
     }
 
-    public String getStudentCode() {
-        return studentCode;
+    public String getUsername() {
+        return username;
     }
 
-    public void setStudentCode(String studentCode) {
-        this.studentCode = studentCode;
+    public void setUsername(String username) {
+        this.username = username;
     }
 
-    public String getIp() {
-        return ip;
+    public String getIpAddress() {
+        return ipAddress;
     }
 
-    public void setIp(String ip) {
-        this.ip = ip;
+    public void setIpAddress(String ipAddress) {
+        this.ipAddress = ipAddress;
     }
+
     
+   
 }
