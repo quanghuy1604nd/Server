@@ -4,9 +4,6 @@
  */
 package question;
 
-import static utils.AppConstants.ProcessCodeConstants.ACCEPTED;
-import static utils.AppConstants.ProcessCodeConstants.WRONG_ANSWER;
-
 /**
  *
  * @author QuangHuy
@@ -18,15 +15,12 @@ public abstract class AbstractQuestion {
     protected String clientAnswer;
     protected Runnable[] actions = new Runnable[200];
 
-    public int process() throws Exception {
+    public boolean process() throws Exception {
         initData();
         createCommunicationScenario();
         runActions();
         closeStream();
-        if (this.answer.equals(this.clientAnswer)) {
-            return ACCEPTED;
-        }
-        return WRONG_ANSWER;
+        return this.answer.equals(this.clientAnswer);
     }
 
     protected void runActions() {

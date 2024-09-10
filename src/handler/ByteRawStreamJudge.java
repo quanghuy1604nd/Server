@@ -37,7 +37,7 @@ public class ByteRawStreamJudge extends Judge {
     }
 
     @Override
-    public int process(String questionCode) throws Exception {
+    public boolean process(String questionCode) throws Exception {
         return this.judge(InputStream.class, OutputStream.class, is, os, questionCode);
     }
 }

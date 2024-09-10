@@ -16,21 +16,29 @@ import dao.SubmissionDAO;
 import dao.ExamUserDAO;
 import dao.ExamUserDetailDAO;
 import dao.UserDAO;
-import exception.InvalidInputFormatException;
+import exception.InvalidRequestException;
+import exception.StepErrorException;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.net.InetSocketAddress;
 import java.net.Socket;
-import java.util.UUID;
+import model.Alias;
+import model.ExamUserDetail;
+import model.Question;
+import model.User;
+import payload.LogPayload;
 import payload.Payload;
 import service.IWebhookService;
 import service.WebhookServiceImpl;
 import static utils.AppConstants.*;
 import static utils.AppConstants.PortConfiguration.*;
-import static utils.Helper.getStackTraceException;
+import static utils.AppConstants.ProcessCodeConstants.ACCEPTED;
+import static utils.AppConstants.ProcessCodeConstants.OTHER;
+import static utils.AppConstants.ProcessCodeConstants.WRONG_ANSWER;
 import utils.Pair;
 
 public class ClientHandler implements Runnable {
+
     protected final Socket socket;
     protected ExamDetailDAO examDetailDAO;
     protected SubmissionDAO submissionDAO;
@@ -42,44 +50,40 @@ public class ClientHandler implements Runnable {
     protected AliasDAO aliasDAO;
     protected IWebhookService webhookService;
 
-    protected int type;
-    protected Payload payload;
+    protected LogPayload logPayload;
+    protected Payload rankPayload;
     protected Long test;
 
-    protected UUID examId;
-    protected UUID examUserExerciseId;
-    protected UUID examUserId;
-    protected UUID examExerciseId;
-    protected UUID userId;
-    protected UUID exerciseId;
+    protected User user;
+    protected Alias alias;
+    protected Question question;
+    protected ExamUserDetail examUserDetail;
+//    protected ExamUser
 
     public ClientHandler(Socket socket) {
         this.socket = socket;
-        this.payload = new Payload();
-        this.payload.setIpAddress(((InetSocketAddress) socket.getRemoteSocketAddress()).getAddress().getHostAddress());
+        this.logPayload = new LogPayload();
+        this.logPayload.setClientInfo(((InetSocketAddress) socket.getRemoteSocketAddress()).getAddress().getHostAddress());
+    }
+
+    public void initDAO() {
+        this.examDetailDAO = new ExamDetailDAO();
+        this.submissionDAO = new SubmissionDAO();
+        this.examUserDAO = new ExamUserDAO();
+        this.examUserDetailDAO = new ExamUserDetailDAO();
         this.userDAO = new UserDAO();
         this.questionDAO = new QuestionDAO();
         this.aliasDAO = new AliasDAO();
         this.webhookService = new WebhookServiceImpl();
     }
 
-    public void initDAO() {
-        this.examDetailDAO = new ExamDetailDAO();
-        this.submissionDAO = new SubmissionDAO();
-        this.examDAO = new ExamDAO();
-        this.examUserDAO = new ExamUserDAO();
-        this.examUserDetailDAO = new ExamUserDetailDAO();
-    }
-    
     @Override
     public void run() {
         String message;
-        int code;
         try {
             socket.setSoTimeout(TIME_OUT_DURATION);
             Judge judge = null;
             switch (socket.getLocalPort()) {
-                
                 case INPUT_STREAM_PORT -> {
                     judge = new ByteRawStreamJudge(this.socket);
                 }
@@ -93,86 +97,68 @@ public class ClientHandler implements Runnable {
                     judge = new CharacterStreamJudge(this.socket);
                 }
                 default -> {
-                    throw new InvalidInputFormatException("s");
+                    throw new InvalidRequestException("");
                 }
             }
+            initDAO();
             Pair<String, String> clientInfo = judge.extractClientInfo();
-            this.payload.setUsername(clientInfo.getKey());
-            this.payload.setAlias(clientInfo.getValue());
-            String questionCode = questionDAO.findQuestionCodeByAliasName(clientInfo.getValue());
-            System.out.println(questionCode);
-            int result = judge.process(questionCode);
+            this.logPayload.setUsername(clientInfo.getKey());
+            this.logPayload.setAliasName(clientInfo.getValue());
+            getUser();
+            getAlias();
+            getExamUserDetail();
+            getQuestion();
+            boolean result = judge.process(question.getCode());
             System.out.println(result);
-        } catch(InvocationTargetException ex) {
-            message = getStackTraceException(ex.getCause());
-            System.out.println("|--------------------------------------------------------|");
-            System.out.println(message);
-        } catch (Exception ex) { // Bắt tất cả các ngoại lệ và xử lý riêng biệt bằng instanceof
-//            message = ex.getStackTrace();
-//            if (ex instanceof InvocationTargetException) {
-//                message = helper.getStackTrace(ex);
-//            } else {
-//                message = helper.getStackTrace(ex);
-//            }
-            message = getStackTraceException(ex);
-            System.out.println(message);
+            this.logPayload.setProcessCode(result ? ACCEPTED : WRONG_ANSWER);
+            this.logPayload.setProcessLog(result ? "ACCCEPTED" : "WRONG ANSWER");
+        } catch (Exception ex) {
+            if (ex instanceof InvocationTargetException) {
+                message = ex.getCause().getMessage();
+                this.logPayload.setProcessCode(((StepErrorException) (ex.getCause())).getProcessCode());
 
+            } else {
+                message = ex.getMessage();
+                this.logPayload.setProcessCode(OTHER);
+            }
+            this.logPayload.setProcessLog(message);
+//            System.out.println(message);
         } finally {
+            webhookService.sendExamLogs(this.logPayload);
             shutdown();
         }
     }
 
-    public void updateContestExerciseStatus(int code) {
-//        if (code == ACCEPTED) {
-//            examUserDetailDAO.updateExamUserExercise(this.examUserExerciseId, code == ACCEPTED);
-//        }
-//        submissionDAO.insertExamSubmission(examUserExerciseId, LocalDateTime.now(), code == ACCEPTED, "");
-//        webhookService.sendExamLogs(payload, this.examId, this.examUserId, code, "");
-//        webhookService.sendRequestToUpdateExamRank(payload, this.examId, this.userId);
+    public void getUser() throws InvalidRequestException {
+        this.user = userDAO.findByUsernameAndIpAddress(this.logPayload.getUsername(), this.logPayload.getClientInfo());
+        if (this.user == null) {
+            throw new InvalidRequestException(String.format("User info [username: %s, ipAddress: %s] is not valid", this.logPayload.getUsername(), this.logPayload.getClientInfo()));
+        }
+        this.logPayload.setUserId(this.user.getId());
     }
 
-    public boolean isValidQuestion() {
-//        userId = userDAO.findByUsernameAndIP(payload.getUsername(), payload.getIp());
-////        userId = userDAO.findUserIdByStudentCode(payload.getUsername());
-//        if (userId == null) {
-//            String message = "Chưa đăng kí hoặc IP không trùng khớp!";
-//            webhookService.sendExamLogs(payload, this.examId, examUserId, FORBIDDEN, message);
-//            shutdown();
-//            return false;
-//        }
-//
-//        this.examDetailDAO.findExamExerciseByExerciseIdAndExamId(userId, examId);
-//        if (this.examUserId == null) {
-//            String message = "Không được tham gia cuộc thi này!";
-//            webhookService.sendExamLogs(payload, this.examId, this.examUserId, FORBIDDEN, message);
-//            shutdown();
-//            return false;
-//        }
-//        exerciseId = exerciseDAO.findExerciseByAliasCode(payload.getAlias());
-//        if (exerciseId == null) {
-//            String message = "Mã bài tập không hợp lệ!";
-////            webhookService.sendContestLogs(payload, this.contestId, this.examId FORBIDDEN, message);
-//            shutdown();
-//            return false;
-//        }
-//        this.examExerciseId = this.examDetailDAO.findExamExerciseByExerciseIdAndExamId(this.exerciseId, this.examId);
-//        if (this.examUserExerciseId == null) {
-//            String message = "Mã bài tập không hợp lệ!";
-//            webhookService.sendExamLogs(payload, this.examId, this.examUserId, FORBIDDEN, message);
-//            shutdown();
-//            return false;
-//        }
-//        this.examUserExerciseId = this.examUserDetailDAO.findExamUserExerciseByAliasCode(payload.getAlias());
-//        if (this.examUserExerciseId == null) {
-//            String message = "Mã bài tập không hợp lệ!";
-//            webhookService.sendExamLogs(payload, this.examId, this.examUserId, REQUEST_WRONG_EXERCISE, message);
-//            shutdown();
-//            return false;
-//        }
-        return true;
+    public void getAlias() throws InvalidRequestException {
+        this.alias = aliasDAO.findByNameAndActive(this.logPayload.getAliasName(), true);
+        if (this.alias == null) {
+            throw new InvalidRequestException(String.format("Question [%s] is not valid", this.logPayload.getAliasName()));
+        }
+        this.logPayload.setExamUserDetailId(this.alias.getExamUserDetailId());
+
     }
 
-   
+    public void getExamUserDetail() throws InvalidRequestException {
+        this.examUserDetail = examUserDetailDAO.findById(this.logPayload.getExamUserDetailId());
+        if (this.examUserDetail == null) {
+            throw new InvalidRequestException(String.format("Question [%s] is not valid", this.logPayload.getAliasName()));
+        }
+    }
+
+    public void getQuestion() throws InvalidRequestException {
+        this.question = questionDAO.findByExamDetailId(this.examUserDetail.getExamDetailId());
+        if (this.question == null) {
+            throw new InvalidRequestException(String.format("Question [%s] is not valid", this.logPayload.getAliasName()));
+        }
+    }
 
     public void shutdown() {
         try {

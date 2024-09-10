@@ -17,7 +17,7 @@ public class AppConstants {
 
     public static class WebhookConstants {
 
-        public static final String WEBHOOK_TOKEN = "graduationthesis";
+        public static final String WEBHOOK_TOKEN = "Z3JhZHVhdGlvbnRoZXNpcw==";
         public static final String WEBHOOK_PRACTICE_LOG_ENDPOINT = System.getenv().getOrDefault("WEBHOOK_PRACTICE_LOG_ENDPOINT", "http://localhost:8080/api/webhook/practice/logs");
         public static final String WEBHOOK_CONTEST_LOG_ENDPOINT = System.getenv().getOrDefault("WEBHOOK_CONTEST_LOG_ENDPOINT", "http://localhost:8080/api/webhook/contest/logs");
         public static final String WEBHOOK_PRACTICE_SCOREBOARD_ENDPOINT = System.getenv().getOrDefault("WEBHOOK_PRACTICE_SCOREBOARD_ENDPOINT", "http://localhost:8080/api/webhook/practice/scoreboard");
@@ -39,11 +39,12 @@ public class AppConstants {
         public static final int CONNECT_SUCCESS = 99;
         public static final int ACCEPTED = 100;
         public static final int WRONG_ANSWER = 101;
-        public static final int EXCEPTION = 102;
+        public static final int INVALID_INPUT_FORMAT = 102;
         public static final int TIME_OUT = 103;
-        public static final int REQUEST_WRONG_EXERCISE = 104;
+        public static final int INVALID_QUESTION = 104;
         public static final int MALFORMED_REQUEST_CODE = 105;
         public static final int FORBIDDEN = 106;
+        public static final int OTHER = 107;
     }
 
     public static class PortConfiguration {

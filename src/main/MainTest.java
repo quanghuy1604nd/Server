@@ -5,18 +5,18 @@
 package main;
 
 import exception.BaseException;
+import service.IWebhookService;
+import service.WebhookServiceImpl;
 
 /**
  *
  * @author quanghuy
  */
 public class MainTest {
-    private static void heh() throws BaseException {
-        System.out.println("dfsa");
-        throw new RuntimeException("fdsa");
-        
-    }
+
     public static void main(String[] args) {
+        WebhookServiceImpl webhookService = new WebhookServiceImpl();
+        webhookService.test();
         Runnable action = () -> {
             System.out.println("fdjsakl;fds");
         };

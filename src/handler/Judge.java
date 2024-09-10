@@ -27,14 +27,14 @@ public abstract class Judge {
         }
     }
 
-    public int judge(Class inputClass, Class outputClass, Object input, Object output, String questionCode) throws Exception {
+    public boolean judge(Class inputClass, Class outputClass, Object input, Object output, String questionCode) throws Exception {
         Class clazz = Class.forName("question." + questionCode);
         Constructor<?> constructor = clazz.getConstructor(inputClass, outputClass);
         Object instance = constructor.newInstance(input, output);
         Method process = clazz.getMethod("process");
-        int result = (int) process.invoke(instance);
+        boolean result = (boolean) process.invoke(instance);
         return result;
     }
     abstract Pair<String, String> extractClientInfo() throws Exception;
-    abstract int process(String questionCode) throws Exception;
+    abstract boolean process(String questionCode) throws Exception;
 }

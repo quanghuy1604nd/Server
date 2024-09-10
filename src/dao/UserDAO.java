@@ -16,13 +16,13 @@ import model.User;
  */
 public class UserDAO extends AbstractDAO {
 
-    private static final String SELECT_ID_BY_USERNAME_AND_IPADRESS = "SELECT id FROM \"user\" WHERE username = ? AND ip = ?";
+    private static final String SELECT_ID_BY_USERNAME_AND_IPADDRESS = "SELECT id, username, ip_address FROM \"user\" WHERE username = ? AND ip_address = ?";
     private static final String SELECT_ID_BY_USERNAME = "SELECT id FROM \"user\" WHERE username = ?";
 
-    public User findByUsernameAndIP(String username, String ip) {
-        try (Connection connection = getConnection(); PreparedStatement preparedStatement = connection.prepareStatement(SELECT_ID_BY_USERNAME_AND_IPADRESS);) {
+    public User findByUsernameAndIpAddress(String username, String ipAddress) {
+        try (Connection connection = getConnection(); PreparedStatement preparedStatement = connection.prepareStatement(SELECT_ID_BY_USERNAME_AND_IPADDRESS);) {
             preparedStatement.setString(1, username);
-            preparedStatement.setString(2, ip);
+            preparedStatement.setString(2, ipAddress);
             ResultSet resultSet = preparedStatement.executeQuery();
             if (resultSet.next()) {
                 User user = new User(
@@ -35,6 +35,7 @@ public class UserDAO extends AbstractDAO {
 
         } catch (Exception e) {
             // TODO: Handle
+            e.printStackTrace();
         }
         return null;
     }

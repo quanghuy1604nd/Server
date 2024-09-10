@@ -14,16 +14,14 @@ public class ExamUserDetail {
     private UUID id;
     private UUID examDetailId;
     private UUID examUserId;
-    private UUID aliasId;
 
     public ExamUserDetail() {
     }
 
-    public ExamUserDetail(UUID id, UUID examDetailId, UUID examUserId, UUID aliasId) {
+    public ExamUserDetail(UUID id, UUID examDetailId, UUID examUserId) {
         this.id = id;
         this.examDetailId = examDetailId;
         this.examUserId = examUserId;
-        this.aliasId = aliasId;
     }
 
     public UUID getId() {
@@ -48,14 +46,6 @@ public class ExamUserDetail {
 
     public void setExamUserId(UUID examUserId) {
         this.examUserId = examUserId;
-    }
-
-    public UUID getAliasId() {
-        return aliasId;
-    }
-
-    public void setAliasId(UUID aliasId) {
-        this.aliasId = aliasId;
     }
     
 }

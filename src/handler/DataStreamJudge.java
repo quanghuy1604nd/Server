@@ -37,7 +37,7 @@ public class DataStreamJudge extends Judge {
 
     }
     @Override
-    public int process(String questionCode) throws Exception {
+    public boolean process(String questionCode) throws Exception {
         return this.judge(DataInputStream.class, DataOutputStream.class, dis, dos, questionCode);
     }
 }

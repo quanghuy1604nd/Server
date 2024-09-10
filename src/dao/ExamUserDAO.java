@@ -14,11 +14,11 @@ import java.sql.ResultSet;
  */
 public class ExamUserDAO extends AbstractDAO {
 
-    private static final String SELECT_EXAMUSERID_BY_USERID_AND_EXAMID = "SELECT id FROM exam_user WHERE user_id=? AND exam_id=?";
+    private static final String SELECT_BY_USERID_AND_EXAMID = "SELECT id FROM exam_user WHERE user_id=? AND exam_id=?";
 
     public Long findByUserIdAndContestId(Long userId, Long contestId) {
         try (Connection connection = getConnection(); 
-                PreparedStatement preparedStatement = connection.prepareStatement(SELECT_EXAMUSERID_BY_USERID_AND_EXAMID);) {
+                PreparedStatement preparedStatement = connection.prepareStatement(SELECT_BY_USERID_AND_EXAMID);) {
             preparedStatement.setLong(1, userId);
             preparedStatement.setLong(2, contestId);
             ResultSet resultSet = preparedStatement.executeQuery();

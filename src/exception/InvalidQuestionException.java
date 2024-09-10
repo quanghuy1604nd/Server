@@ -4,21 +4,20 @@
  */
 package exception;
 
-import static utils.AppConstants.ProcessCodeConstants.EXCEPTION;
+import static utils.AppConstants.ProcessCodeConstants.INVALID_QUESTION;
+
 
 /**
  *
  * @author QuangHuy
  */
-public class InvalidInputFormatException extends BaseException {
-
-    public final int code = EXCEPTION;
-
-    public InvalidInputFormatException(String message) {
+public class InvalidQuestionException extends BaseException{
+    public final int code = INVALID_QUESTION;
+    public InvalidQuestionException(String message) {
         super(message);
     }
 
-    public InvalidInputFormatException(String message, Throwable cause) {
+    public InvalidQuestionException(String message, Throwable cause) {
         super(message, cause);
     }
 
@@ -26,5 +25,5 @@ public class InvalidInputFormatException extends BaseException {
     public int getCode() {
         return this.code;
     }
-
+    
 }

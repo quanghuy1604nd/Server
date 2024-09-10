@@ -44,7 +44,9 @@ public class User {
     public void setIpAddress(String ipAddress) {
         this.ipAddress = ipAddress;
     }
-
-    
+    @Override
+    public String toString() {
+        return "[username= " + this.username +", ipAdress= " + this.ipAddress +"]";
+    }
    
 }

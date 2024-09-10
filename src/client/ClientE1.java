@@ -20,7 +20,7 @@ public class ClientE1 {
         DataInputStream dis = new DataInputStream(socket.getInputStream());
         DataOutputStream dos = new DataOutputStream(socket.getOutputStream());
 
-        dos.writeUTF("b20dccn990;eQhRvOt");
+        dos.writeUTF("b20dccn990;cu5eqo6");
 
         int a = dis.readInt();
         int b = dis.readInt();

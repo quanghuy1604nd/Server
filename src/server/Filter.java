@@ -16,7 +16,6 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
-import utils.AppConstants;
 import static utils.AppConstants.AppConfiguration.MAX_CONNECTION_PER_MINUTE;
 import static utils.AppConstants.AppConfiguration.WAITING_TIME;
 

@@ -4,6 +4,7 @@
  */
 package service;
 
+import payload.LogPayload;
 import payload.Payload;
 
 /**
@@ -11,6 +12,6 @@ import payload.Payload;
  * @author QuangHuy
  */
 public interface IWebhookService {
-    void sendExamLogs(Payload payload, Long examId, Long examUserId, int code, String message);
-    void sendRequestToUpdateExamRank(Payload payload, Long examId, Long examUserId);
+    void sendExamLogs(LogPayload payload);
+//    void sendRequestToUpdateExamRank(Payload payload);
 }

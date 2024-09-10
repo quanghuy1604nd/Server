@@ -25,13 +25,15 @@ public class Helper {
         StringWriter stringWriter = new StringWriter();
         PrintWriter printWriter = new PrintWriter(stringWriter);
         ex.printStackTrace(printWriter);
-        return stringWriter.toString();
+        String stackTrace = stringWriter.toString();
+        return stackTrace;
     }
     
      public static String getStackTraceException(Throwable ex) {
         StringWriter stringWriter = new StringWriter();
         PrintWriter printWriter = new PrintWriter(stringWriter);
         ex.printStackTrace(printWriter);
-        return stringWriter.toString();
+        String stackTrace = stringWriter.toString();
+        return stackTrace;
     }
 }
