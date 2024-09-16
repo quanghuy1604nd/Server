@@ -27,7 +27,6 @@ import model.ExamUserDetail;
 import model.Question;
 import model.User;
 import payload.LogPayload;
-import payload.Payload;
 import payload.RankPayload;
 import service.IWebhookService;
 import service.WebhookServiceImpl;
@@ -110,7 +109,6 @@ public class ClientHandler implements Runnable {
             getExamUserDetail();
             getQuestion();
             boolean result = judge.process(question.getCode());
-            System.out.println(result);
             this.logPayload.setProcessCode(result ? ACCEPTED : WRONG_ANSWER);
             this.logPayload.setProcessLog(result ? "ACCCEPTED" : "WRONG ANSWER");
             this.rankPayload = new RankPayload(this.logPayload);
