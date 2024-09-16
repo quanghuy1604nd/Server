@@ -5,8 +5,6 @@
 package client;
 import java.io.*;
 import java.net.Socket;
-import java.util.Arrays;
-import java.util.List;
 /**
  *
  * @author QuangHuy
@@ -19,16 +17,28 @@ public class ClientE3 {
     Socket socket = new Socket(address, port);
     BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
     BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-
-    String value = "b20dccn111;300";
+    Long start = System.currentTimeMillis();
+    String value = "b20dccn111;RP3m3AYF";
     writer.write(value);
     writer.write("\n");
     writer.flush();
+    Long x1 = System.currentTimeMillis();
+        System.out.println("1 " + (x1 - start));
     String receive = reader.readLine();
-    List<String> filtered = Arrays.stream(receive.split(", ")).filter(x -> x.endsWith(".edu")).toList();
-    filtered.forEach(System.out::println);
-    String result = String.join(", ", filtered);
-    System.out.println(result);
+    Long x2 = System.currentTimeMillis();
+        System.out.println("2 " + (x2 - x1));
+    String[] arr = receive.split(", ");
+    StringBuilder sb = new StringBuilder();
+    for(String x : arr) {
+        if(x.endsWith(".edu")) {
+        System.out.println(x);
+            sb.append(x);
+            sb.append(", ");
+        }
+    }
+        System.out.println(sb);
+    String result = sb.length() == 0 ? "" : sb.substring(0, sb.length() - 2);
+    Long x3 = System.currentTimeMillis();
     writer.write(result);
     writer.write("\n");
     writer.flush();

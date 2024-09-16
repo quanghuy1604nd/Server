@@ -3,45 +3,55 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package dao;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.util.UUID;
 import model.User;
+
 /**
  *
  * @author QuangHuy
  */
-public class UserDAO extends DAO {
+public class UserDAO extends AbstractDAO {
 
-    private static final String SELECT_ID_BY_STUDENT_CODE_AND_IP= "SELECT id FROM \"user\" WHERE username = ? AND ip = ?";
-    private static final String SELECT_ID_BY_STUDENT_CODE= "SELECT id FROM \"user\" WHERE username = ?";
+    private static final String SELECT_ID_BY_USERNAME_AND_IPADDRESS = "SELECT id, username, ip_address FROM \"user\" WHERE username = ? AND ip_address = ?";
+    private static final String SELECT_ID_BY_USERNAME = "SELECT id FROM \"user\" WHERE username = ?";
 
-    public Long findUserIdByStudentCodeAndIP(String studentCode, String ip) {
-        try (Connection connection = getConnection(); 
-                PreparedStatement preparedStatement = connection.prepareStatement(SELECT_ID_BY_STUDENT_CODE_AND_IP);) {
-            preparedStatement.setString(1, studentCode);
-            preparedStatement.setString(2, ip);
-            System.out.println(preparedStatement);
+    public User findByUsernameAndIpAddress(String username, String ipAddress) {
+        try (Connection connection = getConnection(); PreparedStatement preparedStatement = connection.prepareStatement(SELECT_ID_BY_USERNAME_AND_IPADDRESS);) {
+            preparedStatement.setString(1, username);
+            preparedStatement.setString(2, ipAddress);
             ResultSet resultSet = preparedStatement.executeQuery();
             if (resultSet.next()) {
-               return resultSet.getLong("id");
+                User user = new User(
+                        resultSet.getObject("id", UUID.class),
+                        resultSet.getString("username"),
+                        resultSet.getString("ip_address")
+                );
+                return user;
             }
+
         } catch (Exception e) {
             // TODO: Handle
+            e.printStackTrace();
         }
         return null;
     }
-    
+
     // for testing
-    public Long findUserIdByStudentCode(String studentCode) {
-        try (Connection connection = getConnection(); 
-                PreparedStatement preparedStatement = connection.prepareStatement(SELECT_ID_BY_STUDENT_CODE);) {
-            preparedStatement.setString(1, studentCode);
-            System.out.println(preparedStatement);
+    public User findByUsername(String username) {
+        try (Connection connection = getConnection(); PreparedStatement preparedStatement = connection.prepareStatement(SELECT_ID_BY_USERNAME);) {
+            preparedStatement.setString(1, username);
             ResultSet resultSet = preparedStatement.executeQuery();
             if (resultSet.next()) {
-               return resultSet.getLong("id");
+                User user = new User(
+                        resultSet.getObject("id", UUID.class),
+                        resultSet.getString("username"),
+                        resultSet.getString("ip_address")
+                );
+                return user;
             }
         } catch (Exception e) {
             // TODO: Handle

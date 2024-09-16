@@ -4,12 +4,15 @@
  */
 package service;
 
+import payload.LogPayload;
+import payload.Payload;
+import payload.RankPayload;
+
 /**
  *
  * @author QuangHuy
  */
 public interface IWebhookService {
-    void sendWebhookLogs(String ip, String username, String alias, int code, String message);
-
-    public void sendWebhookUpdateScoreBoard(Long userId);
+    void sendExamLogs(LogPayload payload);
+    void sendUpdateLeaderBoard(RankPayload payload);
 }

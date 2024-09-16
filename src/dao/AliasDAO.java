@@ -7,20 +7,28 @@ package dao;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.util.UUID;
+import model.Alias;
 
 /**
  *
  * @author QuangHuy
  */
-public class AliasDAO extends DAO{
-    private static final String SELECT_ALIASID_BY_CODE = "SELECT * FROM alias WHERE code = ?";
+public class AliasDAO extends AbstractDAO{
+    private static final String SELECT_ID_BY_NAME_AND_ACTIVE = "SELECT * FROM alias WHERE name = ? AND active = ?";
 
-    public Long findAliasIdByCode(String code) {
-        try (Connection connection = getConnection(); PreparedStatement preparedStatement = connection.prepareStatement(SELECT_ALIASID_BY_CODE);) {
-            preparedStatement.setString(1, code);
+    public Alias findByNameAndActive(String name, boolean active) {
+        try (Connection connection = getConnection(); PreparedStatement preparedStatement = connection.prepareStatement(SELECT_ID_BY_NAME_AND_ACTIVE);) {
+            preparedStatement.setString(1, name);
+            preparedStatement.setBoolean(2, active);
+            System.out.println(preparedStatement);
             ResultSet resultSet = preparedStatement.executeQuery();
             if (resultSet.next()) {
-                return resultSet.getLong("id");
+                return new Alias(
+                        resultSet.getObject("id", UUID.class),
+                        resultSet.getString("name"),
+                        resultSet.getObject("exam_user_detail_id", UUID.class)
+                );
             }
         } catch (Exception e) {
             e.printStackTrace();

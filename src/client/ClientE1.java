@@ -15,20 +15,25 @@ import java.net.Socket;
  */
 public class ClientE1 {
 
-    public static void main(String[] args) throws IOException {
-        Socket socket = new Socket("20.198.242.126", 1605);
+    public static void main(String[] args) throws IOException, InterruptedException {
+        Socket socket = new Socket("localhost", 1605);
         DataInputStream dis = new DataInputStream(socket.getInputStream());
         DataOutputStream dos = new DataOutputStream(socket.getOutputStream());
-        dos.writeUTF("b20dccn111;100");
+
+        dos.writeUTF("b20dccn990;cu5eqo6");
+//                                        Thread.sleep(6000);
+
         int a = dis.readInt();
         int b = dis.readInt();
+        System.out.println(a + " " + b);
+
         dos.writeInt(a + b);
         dos.writeInt(a - b);
         dos.writeInt(a * b);
-        
+//        Thread.sleep(6000);
         dis.close();
         dos.close();
         socket.close();
-        
+
     }
 }
