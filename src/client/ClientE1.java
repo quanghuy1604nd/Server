@@ -21,16 +21,16 @@ public class ClientE1 {
         DataOutputStream dos = new DataOutputStream(socket.getOutputStream());
 
         dos.writeUTF("b20dccn990;cu5eqo6");
+//                                        Thread.sleep(6000);
 
         int a = dis.readInt();
         int b = dis.readInt();
         System.out.println(a + " " + b);
-                                        Thread.sleep(6000);
 
         dos.writeInt(a + b);
         dos.writeInt(a - b);
         dos.writeInt(a * b);
-        Thread.sleep(6000);
+//        Thread.sleep(6000);
         dis.close();
         dos.close();
         socket.close();

@@ -6,6 +6,7 @@ package service;
 
 import payload.LogPayload;
 import payload.Payload;
+import payload.RankPayload;
 
 /**
  *
@@ -13,5 +14,5 @@ import payload.Payload;
  */
 public interface IWebhookService {
     void sendExamLogs(LogPayload payload);
-//    void sendRequestToUpdateExamRank(Payload payload);
+    void sendUpdateLeaderBoard(RankPayload payload);
 }

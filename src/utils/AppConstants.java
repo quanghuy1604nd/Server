@@ -18,10 +18,8 @@ public class AppConstants {
     public static class WebhookConstants {
 
         public static final String WEBHOOK_TOKEN = "Z3JhZHVhdGlvbnRoZXNpcw==";
-        public static final String WEBHOOK_PRACTICE_LOG_ENDPOINT = System.getenv().getOrDefault("WEBHOOK_PRACTICE_LOG_ENDPOINT", "http://localhost:8080/api/webhook/practice/logs");
-        public static final String WEBHOOK_CONTEST_LOG_ENDPOINT = System.getenv().getOrDefault("WEBHOOK_CONTEST_LOG_ENDPOINT", "http://localhost:8080/api/webhook/contest/logs");
-        public static final String WEBHOOK_PRACTICE_SCOREBOARD_ENDPOINT = System.getenv().getOrDefault("WEBHOOK_PRACTICE_SCOREBOARD_ENDPOINT", "http://localhost:8080/api/webhook/practice/scoreboard");
-        public static final String WEBHOOK_CONTEST_SCOREBOARD_ENDPOINT = System.getenv().getOrDefault("WEBHOOK_CONTEST_SCOREBOARD_ENDPOINT", "http://localhost:8080/api/webhook/contest/scoreboard");
+        public static final String WEBHOOK_EXAM_LOG_ENDPOINT = System.getenv().getOrDefault("WEBHOOK_EXAM_LOG_ENDPOINT", "http://localhost:8080/v1/api/webhook/exams/logs");
+        public static final String WEBHOOK_LEADER_BOARD_ENDPOINT = System.getenv().getOrDefault("WEBHOOK_LEADER_BOARD_ENDPOINT", "http://localhost:8080/v1/api/webhook/exams/leaderboard");
 
     }
 

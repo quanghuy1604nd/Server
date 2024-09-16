@@ -13,6 +13,8 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.net.URI;
 import java.util.UUID;
+import payload.Payload;
+import payload.RankPayload;
 
 /**
  *
@@ -26,7 +28,7 @@ public class WebhookServiceImpl implements IWebhookService {
             Gson gson = new Gson();
             HttpClient client = HttpClient.newHttpClient();
             HttpRequest request = HttpRequest.newBuilder()
-                    .uri(URI.create("http://localhost:8080/v1/api/webhook/exam/logs")) // Webhook URL
+                    .uri(URI.create(WEBHOOK_EXAM_LOG_ENDPOINT)) // Webhook URL
                     .header("Content-Type", "application/json")
                     .header("Secret-Token", WEBHOOK_TOKEN)
                     .POST(HttpRequest.BodyPublishers.ofString(gson.toJson(payload)))
@@ -40,6 +42,25 @@ public class WebhookServiceImpl implements IWebhookService {
         }
     }
 
+    @Override
+    public void sendUpdateLeaderBoard(RankPayload payload) {
+        try {
+            Gson gson = new Gson();
+            HttpClient client = HttpClient.newHttpClient();
+            HttpRequest request = HttpRequest.newBuilder()
+                    .uri(URI.create(WEBHOOK_LEADER_BOARD_ENDPOINT)) // Webhook URL
+                    .header("Content-Type", "application/json")
+                    .header("Secret-Token", WEBHOOK_TOKEN)
+                    .POST(HttpRequest.BodyPublishers.ofString(gson.toJson(payload)))
+                    .build();
+
+            HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+
+            System.out.println("Response from Spring Boot: " + response.body());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 //    @Override
 //    public void sendRequestToUpdateExamRank(Payload payload, Long contestId, Long contestUserId) {
 //        HttpURLConnection conn = null;
@@ -101,4 +122,5 @@ public class WebhookServiceImpl implements IWebhookService {
             e.printStackTrace();
         }
     }
+
 }

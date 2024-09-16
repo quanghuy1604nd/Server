@@ -28,6 +28,7 @@ import model.Question;
 import model.User;
 import payload.LogPayload;
 import payload.Payload;
+import payload.RankPayload;
 import service.IWebhookService;
 import service.WebhookServiceImpl;
 import static utils.AppConstants.*;
@@ -51,7 +52,7 @@ public class ClientHandler implements Runnable {
     protected IWebhookService webhookService;
 
     protected LogPayload logPayload;
-    protected Payload rankPayload;
+    protected RankPayload rankPayload;
     protected Long test;
 
     protected User user;
@@ -112,6 +113,8 @@ public class ClientHandler implements Runnable {
             System.out.println(result);
             this.logPayload.setProcessCode(result ? ACCEPTED : WRONG_ANSWER);
             this.logPayload.setProcessLog(result ? "ACCCEPTED" : "WRONG ANSWER");
+            this.rankPayload = new RankPayload(this.logPayload);
+
         } catch (Exception ex) {
             if (ex instanceof InvocationTargetException) {
                 message = ex.getCause().getMessage();
@@ -125,6 +128,9 @@ public class ClientHandler implements Runnable {
 //            System.out.println(message);
         } finally {
             webhookService.sendExamLogs(this.logPayload);
+            if(this.logPayload.getProcessCode() == ACCEPTED || this.logPayload.getProcessCode() == WRONG_ANSWER) {
+                webhookService.sendUpdateLeaderBoard(rankPayload);
+            }
             shutdown();
         }
     }

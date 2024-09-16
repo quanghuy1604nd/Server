@@ -19,6 +19,9 @@ public class LogPayload extends Payload {
 
     public LogPayload() {
     }
+    public LogPayload(Payload payload) {
+        super(payload);   
+    }
 
     public LogPayload(int processCode, String processLog, UUID userId, UUID examUserId, UUID examUserDetailId, Payload other) {
         super(other);
