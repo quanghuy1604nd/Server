@@ -11,14 +11,14 @@ import java.net.Socket;
  */
 public class ClientE3 {
     public static void main(String[] args) throws IOException {
-    String address = "localhost";
+    String address = "172.188.19.218";
     int port = 1606;
 
     Socket socket = new Socket(address, port);
     BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
     BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
     Long start = System.currentTimeMillis();
-    String value = "b20dccn111;RP3m3AYF";
+    String value = "b00test002;RP3m3AYF";
     writer.write(value);
     writer.write("\n");
     writer.flush();

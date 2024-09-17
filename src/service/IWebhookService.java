@@ -5,7 +5,6 @@
 package service;
 
 import payload.LogPayload;
-import payload.Payload;
 import payload.RankPayload;
 
 /**

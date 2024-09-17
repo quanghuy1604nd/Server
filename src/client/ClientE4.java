@@ -20,10 +20,10 @@ public class ClientE4 {
     }
 
     public static void main(String[] args) throws IOException {
-        Socket socket = new Socket("localhost", 1605);
+        Socket socket = new Socket("172.188.19.218", 1605);
         DataInputStream dis = new DataInputStream(socket.getInputStream());
         DataOutputStream dos = new DataOutputStream(socket.getOutputStream());
-        dos.writeUTF("b20dccn099;f8tjqdC9");
+        dos.writeUTF("b20dccn000;rxiXvHW");
         int a = dis.readInt();
         int b = dis.readInt();
         System.out.println(a + " " + b);
