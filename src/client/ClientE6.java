@@ -25,10 +25,10 @@ import java.net.Socket;
 public class ClientE6 {
 
     public static void main(String[] args) throws IOException {
-        Socket socket = new Socket("localhost", 1604);
+        Socket socket = new Socket("172.188.19.218", 1604);
         InputStream is = socket.getInputStream();
         OutputStream os = socket.getOutputStream();
-        os.write("b20dccn990;lSWDUbe".getBytes());
+        os.write("b00test003;SDYrAds".getBytes());
         byte[] buffer = new byte[1024];
         int bytesRead = is.read(buffer);
         String question = new String(buffer, 0, bytesRead);

@@ -57,7 +57,7 @@ public class AppConstants {
 
         public static final int MAX_CONNECTION = Math.max(2, Runtime.getRuntime().availableProcessors() - 2);
         public static final int MAX_CONNECTION_PER_MINUTE = 10;
-        public static final int WAITING_TIME = 10;
+        public static final int WAITING_TIME = 60;
     }
 
     public static final int TIME_OUT_DURATION = 5000;

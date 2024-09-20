@@ -4,54 +4,45 @@
  */
 package payload;
 
+import java.util.UUID;
+
 /**
  *
  * @author QuangHuy
  */
 public class Payload {
 
-    protected String username;
-    protected String clientInfo;
-    protected String aliasName;
+    protected UUID examUserId;
+    protected UUID examUserDetailId;
 
     public Payload() {
     }
 
     public Payload(Payload other) {
-        this.username = other.username;
-        this.clientInfo = other.clientInfo;
-        this.aliasName = other.aliasName;
+        this.examUserId = other.examUserId;
+        this.examUserDetailId = other.examUserDetailId;
+    }
+    
+    public Payload(UUID examUserId, UUID examUserDetailId) {
+        this.examUserId = examUserId;
+        this.examUserDetailId = examUserDetailId;
     }
 
-    public Payload(String username, String clientInfo, String aliasName) {
-        this.username = username;
-        this.clientInfo = clientInfo;
-        this.aliasName = aliasName;
+    public UUID getExamUserId() {
+        return examUserId;
+    }
+
+    public void setExamUserId(UUID examUserId) {
+        this.examUserId = examUserId;
+    }
+
+    public UUID getExamUserDetailId() {
+        return examUserDetailId;
+    }
+
+    public void setExamUserDetailId(UUID examUserDetailId) {
+        this.examUserDetailId = examUserDetailId;
     }
     
     
-
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
-    public String getClientInfo() {
-        return clientInfo;
-    }
-
-    public void setClientInfo(String clientInfo) {
-        this.clientInfo = clientInfo;
-    }
-
-    public String getAliasName() {
-        return aliasName;
-    }
-
-    public void setAliasName(String aliasName) {
-        this.aliasName = aliasName;
-    }
 }

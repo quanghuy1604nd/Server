@@ -58,7 +58,6 @@ public class ClientHandler implements Runnable {
     protected Alias alias;
     protected Question question;
     protected ExamUserDetail examUserDetail;
-//    protected ExamUser
 
     public ClientHandler(Socket socket) {
         this.socket = socket;
@@ -111,24 +110,24 @@ public class ClientHandler implements Runnable {
             boolean result = judge.process(question.getCode());
             this.logPayload.setProcessCode(result ? ACCEPTED : WRONG_ANSWER);
             this.logPayload.setProcessLog(result ? "ACCCEPTED" : "WRONG ANSWER");
-            this.rankPayload = new RankPayload(this.logPayload);
+            this.rankPayload = new RankPayload(
+                    this.examUserDetail.getExamUserId(),
+                    this.examUserDetail.getId(),
+                    result
+            );
+            webhookService.sendUpdateLeaderBoard(rankPayload);
 
         } catch (Exception ex) {
             if (ex instanceof InvocationTargetException) {
                 message = ex.getCause().getMessage();
                 this.logPayload.setProcessCode(((StepErrorException) (ex.getCause())).getProcessCode());
-
             } else {
                 message = ex.getMessage();
                 this.logPayload.setProcessCode(OTHER);
             }
             this.logPayload.setProcessLog(message);
-//            System.out.println(message);
         } finally {
             webhookService.sendExamLogs(this.logPayload);
-            if(this.logPayload.getProcessCode() == ACCEPTED || this.logPayload.getProcessCode() == WRONG_ANSWER) {
-                webhookService.sendUpdateLeaderBoard(rankPayload);
-            }
             shutdown();
         }
     }
@@ -146,15 +145,16 @@ public class ClientHandler implements Runnable {
         if (this.alias == null) {
             throw new InvalidRequestException(String.format("Question [%s] is not valid", this.logPayload.getAliasName()));
         }
-        this.logPayload.setExamUserDetailId(this.alias.getExamUserDetailId());
-
     }
 
     public void getExamUserDetail() throws InvalidRequestException {
-        this.examUserDetail = examUserDetailDAO.findById(this.logPayload.getExamUserDetailId());
+        this.examUserDetail = examUserDetailDAO.findById(this.alias.getExamUserDetailId());
         if (this.examUserDetail == null) {
             throw new InvalidRequestException(String.format("Question [%s] is not valid", this.logPayload.getAliasName()));
         }
+        this.logPayload.setExamUserDetailId(this.examUserDetail.getId());
+        this.logPayload.setExamUserId(this.examUserDetail.getExamUserId());
+
     }
 
     public void getQuestion() throws InvalidRequestException {

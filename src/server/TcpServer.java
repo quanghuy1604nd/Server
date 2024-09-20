@@ -5,13 +5,16 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.logging.Level;
 import static utils.AppConstants.AppConfiguration.MAX_CONNECTION;
 import static utils.AppConstants.PortConfiguration.*;
+import java.util.logging.Logger;
 
 /**
  * TcpServer class to handle multiple types of streams.
  */
 public class TcpServer {
+    private static final Logger logger = Logger.getLogger(TcpServer.class.getName());
 
     private final ServerSocket inputStreamServer;
     private final ServerSocket dataStreamServer;
@@ -33,10 +36,10 @@ public class TcpServer {
 
     public void run() {
         try {
-            System.out.println("InputStream Server is ready at port " + this.inputStreamServer.getLocalPort() + "...");
-            System.out.println("DataStream Server is ready at port " + this.dataStreamServer.getLocalPort() + "...");
-            System.out.println("CharacterStream Server is ready at port " + this.charStreamServer.getLocalPort() + "...");
-            System.out.println("ObjectStream Server is ready at port " + this.objStreamServer.getLocalPort() + "...");
+            logger.log(Level.INFO, "InputStream Server is ready at port {0}...", this.inputStreamServer.getLocalPort());
+            logger.log(Level.INFO, "DataStream Server is ready at port {0}...", this.dataStreamServer.getLocalPort());
+            logger.log(Level.INFO, "CharacterStream Server is ready at port {0}...", this.charStreamServer.getLocalPort());
+            logger.log(Level.INFO, "ObjectStream Server is ready at port {0}...", this.objStreamServer.getLocalPort());
             filter.scheduleFilter();
             // Start a new thread for each server socket
             new Thread(() -> listenToPort(this.inputStreamServer)).start();
@@ -45,7 +48,7 @@ public class TcpServer {
             new Thread(() -> listenToPort(this.objStreamServer)).start();
 
         } catch (Exception ex) {
-            ex.printStackTrace();
+            logger.log(Level.SEVERE, ex.getMessage());
         }
     }
 
@@ -55,7 +58,7 @@ public class TcpServer {
                 Socket conn = serverSocket.accept();
                 filter.doFilter(conn, pool);
             } catch (IOException ex) {
-                System.out.println("Handle failed");
+                logger.log(Level.SEVERE, ex.getMessage());
             }
         }
     }
@@ -67,6 +70,7 @@ public class TcpServer {
     }
 
     public void shutdown() throws IOException {
+        logger.log(Level.INFO, "(shutdown)");
         try {
             if (!this.inputStreamServer.isClosed()) this.inputStreamServer.close();
             if (!this.dataStreamServer.isClosed()) this.dataStreamServer.close();
@@ -74,7 +78,7 @@ public class TcpServer {
             if (!this.objStreamServer.isClosed()) this.objStreamServer.close();
             this.pool.shutdown();
         } catch (IOException ex) {
-            // Handle
+            logger.log(Level.SEVERE, "(shutdown) {0}}", ex.getMessage());
         }
     }
 }

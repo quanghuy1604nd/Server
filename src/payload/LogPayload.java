@@ -11,11 +11,12 @@ import java.util.UUID;
  * @author QuangHuy
  */
 public class LogPayload extends Payload {
+    protected UUID userId;
+    protected String username;
+    protected String clientInfo;
+    protected String aliasName;
     private int processCode;
     private String processLog;
-    private UUID userId;
-    private UUID examUserId;
-    private UUID examUserDetailId;
 
     public LogPayload() {
     }
@@ -23,40 +24,14 @@ public class LogPayload extends Payload {
         super(payload);   
     }
 
-    public LogPayload(int processCode, String processLog, UUID userId, UUID examUserId, UUID examUserDetailId, Payload other) {
+    public LogPayload(UUID userId, String username, String clientInfo, String aliasName, int processCode, String processLog, Payload other) {
         super(other);
+        this.userId = userId;
+        this.username = username;
+        this.clientInfo = clientInfo;
+        this.aliasName = aliasName;
         this.processCode = processCode;
         this.processLog = processLog;
-        this.userId = userId;
-        this.examUserId = examUserId;
-        this.examUserDetailId = examUserDetailId;
-    }
-
-    public LogPayload(String username, String clientInfo, String aliasName, int status, int processCode, String processLog, UUID userId, UUID examUserId, UUID examUserDetailId) {
-        super(username, clientInfo, aliasName);
-        this.processCode = processCode;
-        this.processLog = processLog;
-        this.userId = userId;
-        this.examUserId = examUserId;
-        this.examUserDetailId = examUserDetailId;
-    }
-    
-
-    
-    public String getProcessLog() {
-        return processLog;
-    }
-
-    public void setProcessLog(String processLog) {
-        this.processLog = processLog.replace("\n", "\\n").replace("\r", "\\r").replace("\t", "\\t");;
-    }
-
-    public int getProcessCode() {
-        return processCode;
-    }
-
-    public void setProcessCode(int processCode) {
-        this.processCode = processCode;
     }
 
     public UUID getUserId() {
@@ -67,19 +42,44 @@ public class LogPayload extends Payload {
         this.userId = userId;
     }
 
-    public UUID getExamUserId() {
-        return examUserId;
+    public String getUsername() {
+        return username;
     }
 
-    public void setExamUserId(UUID examUserId) {
-        this.examUserId = examUserId;
+    public void setUsername(String username) {
+        this.username = username;
     }
 
-    public UUID getExamUserDetailId() {
-        return examUserDetailId;
+    public String getClientInfo() {
+        return clientInfo;
     }
 
-    public void setExamUserDetailId(UUID examUserDetailId) {
-        this.examUserDetailId = examUserDetailId;
+    public void setClientInfo(String clientInfo) {
+        this.clientInfo = clientInfo;
     }
+
+    public String getAliasName() {
+        return aliasName;
+    }
+
+    public void setAliasName(String aliasName) {
+        this.aliasName = aliasName;
+    }
+
+    public int getProcessCode() {
+        return processCode;
+    }
+
+    public void setProcessCode(int processCode) {
+        this.processCode = processCode;
+    }
+
+    public String getProcessLog() {
+        return processLog;
+    }
+
+    public void setProcessLog(String processLog) {
+        this.processLog = processLog;
+    }
+    
 }

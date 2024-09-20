@@ -16,14 +16,17 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
+import java.util.logging.Level;
 import static utils.AppConstants.AppConfiguration.MAX_CONNECTION_PER_MINUTE;
 import static utils.AppConstants.AppConfiguration.WAITING_TIME;
+import java.util.logging.Logger;
 
 /**
  *
  * @author QuangHuy
  */
 public class Filter {
+    private static final Logger logger = Logger.getLogger(Filter.class.getName());
 
     private final Map<String, Integer> requestCounts;
     private final Map<String, Integer> remainDeniedTime;
@@ -60,6 +63,7 @@ public class Filter {
             if (isSpam(clientIP, count + 1)) {
                 String message = String.format("IP: %s reach limit %d request per %s -> Denied, Wait for %d %s\n",
                         clientIP, MAX_CONNECTION_PER_MINUTE, TimeUnit.SECONDS, WAITING_TIME, TimeUnit.SECONDS);
+                logger.log(Level.INFO, "(doFilter) message: {0}", message);
                 this.closeClientSocket(client);
             } else {
                 ClientHandler handler = new ClientHandler(client);
@@ -76,6 +80,7 @@ public class Filter {
     }
 
     public boolean isSpam(String clientIP, int requestCounts) {
+        logger.log(Level.INFO, "(isSpam) clientIP={0} requestCounts={1}", new Object[]{clientIP, requestCounts});
         if (requestCounts > MAX_CONNECTION_PER_MINUTE) {
             this.remainDeniedTime.put(clientIP, WAITING_TIME);
             return true;

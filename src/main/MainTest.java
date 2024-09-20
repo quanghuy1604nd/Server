@@ -16,7 +16,7 @@ public class MainTest {
 
     public static void main(String[] args) {
         WebhookServiceImpl webhookService = new WebhookServiceImpl();
-        webhookService.test();
+//        webhookService.test();
         Runnable action = () -> {
             System.out.println("fdjsakl;fds");
         };
