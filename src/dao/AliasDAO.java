@@ -21,7 +21,6 @@ public class AliasDAO extends AbstractDAO{
         try (Connection connection = getConnection(); PreparedStatement preparedStatement = connection.prepareStatement(SELECT_ID_BY_NAME_AND_ACTIVE);) {
             preparedStatement.setString(1, name);
             preparedStatement.setBoolean(2, active);
-            System.out.println(preparedStatement);
             ResultSet resultSet = preparedStatement.executeQuery();
             if (resultSet.next()) {
                 return new Alias(

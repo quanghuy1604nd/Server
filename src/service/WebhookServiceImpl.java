@@ -12,14 +12,17 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.net.URI;
-import java.util.UUID;
+import java.util.logging.Level;
 import payload.RankPayload;
+import java.util.logging.Logger;
 
 /**
  *
  * @author QuangHuy
  */
 public class WebhookServiceImpl implements IWebhookService {
+
+    private static final Logger logger = Logger.getLogger(WebhookServiceImpl.class.getName());
 
     @Override
     public void sendExamLogs(LogPayload payload) {
@@ -33,11 +36,12 @@ public class WebhookServiceImpl implements IWebhookService {
                     .POST(HttpRequest.BodyPublishers.ofString(gson.toJson(payload)))
                     .build();
 
-            HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+//            HttpResponse<String> response = 
+            client.send(request, HttpResponse.BodyHandlers.ofString());
 
-            System.out.println("Response from Spring Boot: " + response.body());
+//            System.out.println("Response from Spring Boot: " + response.statusCode());
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.log(Level.SEVERE, "(sendExamLogs) {0}", e.getMessage());
         }
     }
 
@@ -53,11 +57,11 @@ public class WebhookServiceImpl implements IWebhookService {
                     .POST(HttpRequest.BodyPublishers.ofString(gson.toJson(payload)))
                     .build();
 
-            HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+            client.send(request, HttpResponse.BodyHandlers.ofString());
 
-            System.out.println("Response from Spring Boot: " + response.body());
+//            System.out.println("Response from Spring Boot: " + response.statusCode());
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.log(Level.SEVERE, "(sendUpdateLeaderBoard) {0}", e.getMessage());
         }
     }
 }

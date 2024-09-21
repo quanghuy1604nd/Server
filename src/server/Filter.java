@@ -80,7 +80,6 @@ public class Filter {
     }
 
     public boolean isSpam(String clientIP, int requestCounts) {
-        logger.log(Level.INFO, "(isSpam) clientIP={0} requestCounts={1}", new Object[]{clientIP, requestCounts});
         if (requestCounts > MAX_CONNECTION_PER_MINUTE) {
             this.remainDeniedTime.put(clientIP, WAITING_TIME);
             return true;
