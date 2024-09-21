@@ -24,9 +24,9 @@ class ClientThread extends Thread {
 
     @Override
     public void run() {
-        String studentCode = "b20DCNA111";
-        String questionCode = "eQYnEMO";
-        String serverAddress = "localhost";
+        String studentCode = "b00TEST000";
+        String questionCode = "iG7N6RD";
+        String serverAddress = "172.188.19.218";
         int serverPort = 1605;
         try (Socket socket = new Socket(serverAddress, serverPort); DataInputStream dis = new DataInputStream(socket.getInputStream()); DataOutputStream dos = new DataOutputStream(socket.getOutputStream());) {
 
@@ -37,7 +37,7 @@ class ClientThread extends Thread {
             int b = dis.readInt();
             System.out.println(a + " 1" + b);
 
-            dos.writeInt(a + b);
+            dos.writeInt(a + b + 1);
             dos.writeInt(a - b);
             dos.writeInt(a * b);
         } catch (IOException ex) {

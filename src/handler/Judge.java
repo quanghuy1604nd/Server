@@ -19,7 +19,7 @@ public abstract class Judge {
     public Pair<String, String> validate(String requestCode) {
         if (isValidateRequestCode(requestCode)) {
             String[] code = requestCode.split(";");
-            String username = code[0];
+            String username = code[0].toLowerCase();
             String alias = code[1];
             return new Pair<>(username, alias);
         } else {
