@@ -15,14 +15,16 @@ import java.net.Socket;
  */
 public class ClientE5 {
      public static void main(String[] args) throws IOException {
-        Socket socket = new Socket("172.188.19.218", 1605);
+        Socket socket = new Socket("localhost", 1605);
         DataInputStream dis = new DataInputStream(socket.getInputStream());
         DataOutputStream dos = new DataOutputStream(socket.getOutputStream());
-        dos.writeUTF("b20xyzt000;tojbmuP");
-        String question = dis.readUTF();
+        dos.writeUTF("b00test000;eEotENp");
+        String question = dis.readUTF();         System.out.println(question);
+
         StringBuilder sb = new StringBuilder(question);
-        dos.writeUTF(sb.reverse().toString());
-        
+        String reverse = sb.reverse().toString();
+        dos.writeUTF(reverse);
+         System.out.println(reverse);
         dis.close();
         dos.close();
         socket.close();

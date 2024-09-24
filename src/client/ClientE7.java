@@ -20,14 +20,14 @@ import java.util.List;
 public class ClientE7 {
 
     public static void main(String[] args) throws IOException {
-        String address = "localhost";
+        String address = "172.188.19.218";
         int port = 1606;
 
         Socket socket = new Socket(address, port);
         BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
         BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 
-        String value = "b20dccn099;vx2YYPZ7";
+        String value = "b00test000;q4RRVpR";
         System.out.println(value);
         writer.write(value + "\n");
         writer.flush();
@@ -42,6 +42,7 @@ public class ClientE7 {
             }
         }
         String answer = as.toString();
+        System.out.println(answer);
 
         
         writer.write(answer + "\n");

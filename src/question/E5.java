@@ -25,7 +25,7 @@ public class E5 extends DataStreamQuestion {
     @Override
     void initData() {
         this.question = generate();
-        this.answer = new StringBuilder(question).reverse().toString();
+        this.answer = (new StringBuilder(question).reverse()).toString();
     }
 
     public String generate() {

@@ -23,7 +23,7 @@ public class ClientE4 {
         Socket socket = new Socket("localhost", 1605);
         DataInputStream dis = new DataInputStream(socket.getInputStream());
         DataOutputStream dos = new DataOutputStream(socket.getOutputStream());
-        dos.writeUTF("b20dccn009;lf2vYPA");
+        dos.writeUTF("b00test000;ANOcZTz");
         int a = dis.readInt();
         int b = dis.readInt();
         System.out.println(a + " " + b);

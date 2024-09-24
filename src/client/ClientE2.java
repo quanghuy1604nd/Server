@@ -78,7 +78,7 @@ public class ClientE2 implements Runnable{
     }
     public static void main(String[] args) throws IOException, InterruptedException {
         String studentCode = "b00test000";
-        String questionCode = "KgrRuuT";
+        String questionCode = "z8rOQ7R";
         String serverAddress = "172.188.19.218";
         int serverPort = 1604;
         ClientE2 client = new ClientE2(studentCode, questionCode, serverAddress, serverPort);

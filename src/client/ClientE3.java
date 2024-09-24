@@ -18,7 +18,7 @@ public class ClientE3 {
     BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
     BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
     Long start = System.currentTimeMillis();
-    String value = "b00test000;RP3m3AYF";
+    String value = "b00test000;DgXx3FW";
     writer.write(value);
     writer.write("\n");
     writer.flush();
