@@ -51,9 +51,7 @@ public class E5 extends DataStreamQuestion {
 
         actions[1] = () -> {
             try {
-                String clientResponse = dis.readUTF();
-                StringBuilder sb = new StringBuilder(clientResponse);
-                this.clientAnswer = sb.reverse().toString();
+                this.clientAnswer = dis.readUTF();
             } catch (Exception ex) {
                 throw new StepErrorException(step, ex);
             }
