@@ -45,8 +45,7 @@ public class E7 extends CharacterStreamQuestion {
         
         actions[1] = () -> {
             try {
-                this.answer = reader.readLine();
-                
+                this.clientAnswer = reader.readLine();
             } catch(Exception ex) {
                 throw new StepErrorException(step, ex);
             }

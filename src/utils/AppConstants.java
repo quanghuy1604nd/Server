@@ -50,7 +50,7 @@ public class AppConstants {
         public static final int INPUT_STREAM_PORT = 1604;
         public static final int DATA_STREAM_PORT = 1605;
         public static final int CHARACTER_STREAM_PORT = 1606;
-        public static final int OBJECT_STREAM_PORT = 1608;
+        public static final int OBJECT_STREAM_PORT = 1607;
     }
 
     public static class AppConfiguration {
