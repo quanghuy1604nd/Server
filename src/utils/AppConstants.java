@@ -28,7 +28,7 @@ public class AppConstants {
 
         public static final String JDBC_URL = System.getenv().getOrDefault("JDBC_URL", "jdbc:postgresql://localhost:5432/graduation_thesis2");
         public static final String JDBC_USERNAME = System.getenv().getOrDefault("JDBC_USERNAME", "postgres");
-        public static final String JDBC_PASSWORD = System.getenv().getOrDefault("JDBC_PASSWORD", "1234");
+        public static final String JDBC_PASSWORD = System.getenv().getOrDefault("JDBC_PASSWORD", "1");
         public static final String CLASS_FOR_NAME = "org.postgresql.Driver";
     }
 

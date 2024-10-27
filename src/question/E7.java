@@ -7,6 +7,8 @@ package question;
 import exception.StepErrorException;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.IOException;
+import java.net.Socket;
 import java.util.Random;
 import static utils.AppConstants.RandomConstants.ALL_LOWER_LETTERS;
 import utils.Pair;
@@ -19,20 +21,21 @@ public class E7 extends CharacterStreamQuestion {
 
     private String question;
 
-    public E7(BufferedWriter writer, BufferedReader reader) {
-        this.writer = writer;
-        this.reader = reader;
+    private static final int TIME_OUT = 5000;
+
+    public E7(Socket clientSocket) throws IOException {
+        super(clientSocket, TIME_OUT);
     }
 
     @Override
-    void initData() {
+    public void initData() {
         var tmp = generate();
         this.question = tmp.getKey();
         this.answer = tmp.getValue();
     }
 
     @Override
-    void createCommunicationScenario() throws Exception {
+    public void createCommunicationScenario() throws Exception {
         actions[0] = () -> {
             try {
                 step++;
@@ -42,11 +45,11 @@ public class E7 extends CharacterStreamQuestion {
                 throw new StepErrorException(step, ex);
             }
         };
-        
+
         actions[1] = () -> {
             try {
                 this.clientAnswer = reader.readLine();
-            } catch(Exception ex) {
+            } catch (Exception ex) {
                 throw new StepErrorException(step, ex);
             }
         };

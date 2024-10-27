@@ -5,8 +5,10 @@
 package question;
 
 import exception.StepErrorException;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.net.Socket;
 import java.util.Random;
 
 /**
@@ -16,13 +18,13 @@ import java.util.Random;
 public class E2 extends ByteRawStreamQuestion {
     private String question;
 
-    public E2(InputStream is, OutputStream os) {
-        this.is = is;
-        this.os = os;
+      private static final int TIME_OUT = 5000;
+    public E2(Socket clientSocket) throws IOException {
+        super(clientSocket, TIME_OUT);
     }
 
     @Override
-    void initData() {
+    public void initData() {
         int[] arr = genRandomArr(4);
         this.question = genQuestion(arr);
         this.answer = getAnswer(arr) + "";

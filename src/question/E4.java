@@ -7,6 +7,8 @@ package question;
 import exception.StepErrorException;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
+import java.io.IOException;
+import java.net.Socket;
 import utils.Pair;
 
 /**
@@ -18,9 +20,10 @@ public class E4 extends DataStreamQuestion {
     private int randNum1;
     private int randNum2;
 
-    public E4(DataInputStream dis, DataOutputStream dos) {
-        this.dis = dis;
-        this.dos = dos;
+    private static final int TIME_OUT = 5000;
+
+    public E4(Socket clientSocket) throws IOException {
+        super(clientSocket, TIME_OUT);
     }
 
     public static int euclide(int a, int b) {
@@ -31,7 +34,7 @@ public class E4 extends DataStreamQuestion {
     }
 
     @Override
-    void initData() {
+    public void initData() {
         this.randNum1 = (int) (Math.random() * 20);
         this.randNum2 = (int) (Math.random() * 20);
         int gcd = euclide(randNum1, randNum2);
@@ -40,7 +43,7 @@ public class E4 extends DataStreamQuestion {
     }
 
     @Override
-    void createCommunicationScenario() throws Exception {
+    public void createCommunicationScenario() throws Exception {
         actions[0] = () -> {
             try {
                 step++;

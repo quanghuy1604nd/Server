@@ -7,6 +7,7 @@ package question;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
+import java.net.Socket;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -17,6 +18,12 @@ import java.util.logging.Logger;
 public abstract class DataStreamQuestion extends AbstractQuestion {
     protected DataInputStream dis;
     protected DataOutputStream dos;
+
+    public DataStreamQuestion(Socket clientSocket, int timeout) throws IOException {
+        super(clientSocket, timeout);
+        this.dis = new DataInputStream(clientSocket.getInputStream());
+        this.dos = new DataOutputStream(clientSocket.getOutputStream());
+    }
     
     
     @Override

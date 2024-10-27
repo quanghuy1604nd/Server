@@ -7,6 +7,8 @@ package question;
 import exception.StepErrorException;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
+import java.io.IOException;
+import java.net.Socket;
 
 /**
  *
@@ -16,14 +18,13 @@ public class E1 extends DataStreamQuestion {
 
     private int randNum1;
     private int randNum2;
-
-    public E1(DataInputStream dis, DataOutputStream dos) {
-        this.dis = dis;
-        this.dos = dos;
+    private static final int TIME_OUT = 5000;
+    public E1(Socket clientSocket) throws IOException {
+        super(clientSocket, TIME_OUT);
     }
 
     @Override
-    void initData() {
+    public void initData() {
         randNum1 = (int) (Math.random() * 20);
         randNum2 = (int) (Math.random() * 20);
         int answerSum = randNum1 + randNum2;

@@ -5,6 +5,8 @@
 package question;
 
 import exception.StepErrorException;
+import java.net.Socket;
+import java.net.SocketException;
 
 /**
  *
@@ -12,21 +14,25 @@ import exception.StepErrorException;
  */
 public class Template extends AbstractQuestion{
 
+    public Template(Socket clientSocket, int timeout) throws SocketException {
+        super(clientSocket, timeout);
+    }
+
     @Override
-    void initData() {
+    public void initData() {
         // init variable that need to be send
         // Example: private String question
         
     }
 
     @Override
-    void closeStream() {
+    public void closeStream() {
         // this method is already implemented in 3 specific stream question
         // don't need to implement this
     }
 
     @Override
-    void createCommunicationScenario() throws Exception {
+    public void createCommunicationScenario() throws Exception {
         
         actions[0] = () -> {
             try {

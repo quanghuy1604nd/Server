@@ -7,7 +7,10 @@ package question;
 import exception.StepErrorException;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
+import java.io.IOException;
+import java.net.Socket;
 import java.util.Random;
+
 /**
  *
  * @author QuangHuy
@@ -16,14 +19,15 @@ public class E5 extends DataStreamQuestion {
 
     private String question;
 
-    public E5(DataInputStream dis, DataOutputStream dos) {
-        this.dis = dis;
-        this.dos = dos;
+    private static final int TIME_OUT = 5000;
+
+    public E5(Socket clientSocket) throws IOException {
+        super(clientSocket, TIME_OUT);
     }
     private static String src = "0123456789abcdefghijklmnopqrstuvwxyz";
 
     @Override
-    void initData() {
+    public void initData() {
         this.question = generate();
         this.answer = (new StringBuilder(question).reverse()).toString();
     }
